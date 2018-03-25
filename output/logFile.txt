@@ -1,0 +1,23 @@
+
+*----------------------------*
+System started at: 2018/03/25 01:51:19
+System started at: 1521957079077
+Started by: Dakota
+*----------------------------*
+
+System temp: 50.0
+System Status: true
+Is PI: false
+Init, Run & Connected: false, false, true
+Mode: 0, 0
+Stabalized: true, Movable mode: 0
+Motor Values: Movable; Motors: 1500, 1500, 1500, 1500, 1500, 1500, 
+Telemitry; Current, Target 
+	Yaw(direction): 0; 0
+	Pitch: 0, 0
+	Roll: 0, 0
+	Depth: 0; 5
+Successful cfg parsing
+*----------------------*
+
+Parser line input: GiveUpdateInfo
