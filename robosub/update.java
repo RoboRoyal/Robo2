@@ -113,7 +113,7 @@ class update implements Runnable{//interface with sensors
                 }
             } 
         }
-        serial.close();
+        try{serial.close();}catch(Exception e){System.out.println("Error closing serial: "+e);}
         synchronized(t){
             t.notify();
         }
@@ -388,7 +388,7 @@ class update implements Runnable{//interface with sensors
 		return me;
     }
     public static void resetPort(){
-    	serial.close();
+    	try{serial.close();}catch(Exception e){System.out.println("Error in update.resetPort(): "+e);}
     }
     
     public void start() {
