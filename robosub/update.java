@@ -31,6 +31,7 @@ class update implements Runnable{//interface with sensors
     private static int mod = 0;
     static int init = 0;
     private static final String ard = "/dev/ttyACM0";
+    //private static int ard_num = 0;
     private static final String port = System.getProperty("serial.port", ard);
     private static final int br = 9600;//Integer.parseInt(System.getProperty("baud.rate", "9600"));
     private static Serial serial;
@@ -112,6 +113,7 @@ class update implements Runnable{//interface with sensors
                 }
             } 
         }
+        serial.close();
         synchronized(t){
             t.notify();
         }
@@ -135,14 +137,17 @@ class update implements Runnable{//interface with sensors
         serial = SerialFactory.createInstance();//creates serial instance 
         if(IS_PI && useReal){//only adds even listener if a true pi
         	serial.addListener(event -> {//add event listener to get data from port
-                String payload;
+                String payload = "";
                 try {
+                	Thread.sleep(10);
                     payload = event.getAsciiString();
                 } catch (IOException ioe) {
                     System.out.println("Failed to connect to arduino "+ioe.getMessage());
                     debug.log_err("Failed to connect to arduino "+ioe.getMessage());
                     throw new RuntimeException(ioe);
-                }
+                } catch (InterruptedException e) {
+					System.out.println("Error waiting for in); update.setUp(): "+e);
+				}
                 parseIn(payload);//parser input from port(Arduino)
             });
         }
@@ -234,6 +239,9 @@ class update implements Runnable{//interface with sensors
         int test_num = (int) (Math.random()*121);//11^2
         newString += test_num;
         newString += ",";//sets the rest of the values
+        try {
+			Thread.sleep(delayTime - 5);
+		} catch (InterruptedException e1) {System.out.println("Interupt in delay of update.selftest(): "+e1);}
         set(newString);
         ready = true;
         String good_string = "Running self test: " + test_num;
@@ -378,6 +386,9 @@ class update implements Runnable{//interface with sensors
     	me += "; Water: " + waterLvl;
     	me += "; Depth: " + depth;
 		return me;
+    }
+    public static void resetPort(){
+    	serial.close();
     }
     
     public void start() {

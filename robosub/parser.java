@@ -414,7 +414,7 @@ public class parser implements Runnable {
 					System.out.println("Can't start run mode, you have not initilized");
 				}
 				break;
-			case "GiveUpdateInfo":
+			case "giveupdateinfo":
 				for(int mine = 0; mine < 100; mine++){
 					System.out.println(update.ToString());
 					Thread.sleep(500);

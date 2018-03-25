@@ -54,15 +54,15 @@ public class core implements Runnable {
 		Thread.sleep(100);//chiil for a sec
 		movable.stop();//stop and surface sub
 		movable.surface();
-		Thread.sleep(400);//give time for command to go through
+		Thread.sleep(200);//give time for command to go through
 		movable.stop_thread();//stop movable
-		Thread.sleep(400);
+		Thread.sleep(200);
 		sonar.stop();//stop sonar
 		// /motorControle.stop();
 		Thread.sleep(200);
 		update.stop();//give update time to give message then stop it
-		Thread.sleep(400);
-		//t = null; //may want to uncomment; helps reset thread when it works
+		Thread.sleep(200);
+		t = null; //may want to uncomment; helps reset thread when it works
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class core implements Runnable {
 		boolean status = status();
 		int step = 0;
 		int state = 0;
-		while (!goal && ((mode >= 10) || (status && System.currentTimeMillis() < end_time))) {
+		while (RUN && !goal && ((mode >= 10) || (status && System.currentTimeMillis() < end_time))) {
 			step++;
 			if (mode < 0)
 				debug.error("Invalid mode");
