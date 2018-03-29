@@ -11,7 +11,7 @@ package robosub;
  */
 class movable implements Runnable {
 	Thread t;
-	static boolean run = false;// Initialize to false, must be set to true
+	static boolean RUN = false;// Initialize to false, must be set to true
 								// before running
 	static boolean init = false;//keeps track of if movable has been initialized 
 	static boolean stabilize = true;// Whether or not to actively stabilize the
@@ -275,7 +275,7 @@ class movable implements Runnable {
 	}
 
 	/**
-	 * Stops and surfaces sub.
+	 * Stops and surfaces sub. Updates more to 0.
 	 */
 	public static void abort() {
 		stop();
@@ -387,7 +387,7 @@ class movable implements Runnable {
 	 * Stops execution of this thread within 100ms.
 	 */
 	public static void stop_thread() {
-		run = false;
+		RUN = false;
 	}
 
 	/**
@@ -600,7 +600,7 @@ class movable implements Runnable {
 	 */
 	private void norm() throws Exception {
 		int div = 0;
-		while (run) {
+		while (RUN) {
 			if (div == 10000)
 				div = -1;
 			div++;
@@ -649,7 +649,7 @@ class movable implements Runnable {
 			e.printStackTrace();
 		}
 		// self test
-		run = true;
+		RUN = true;
 		init = true;
 		System.out.println("Stabilization and motor function initilized");
 		try {
@@ -660,7 +660,7 @@ class movable implements Runnable {
 		}
 		System.out.println("Shutting down sub stabilization");
 	}
-	public static boolean initiated(){return(run && init);}
+	public static boolean initiated(){return(RUN && init);}
 	public void start() {
 		if (t == null) {
 			t = new Thread(this, "movable");

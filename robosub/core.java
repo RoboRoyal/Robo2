@@ -43,8 +43,6 @@ public class core implements Runnable {
 	}
 	
 	static void shutdown(String why) throws InterruptedException {
-
-	//static void shutdown() throws InterruptedException {
 		if (basic.debug_lvl > 0)
 			debug.logWithStack("System receaved shutdown command becuase: "+why);
 		System.out.println("Ending...");
@@ -58,11 +56,10 @@ public class core implements Runnable {
 		movable.stop_thread();//stop movable
 		Thread.sleep(200);
 		sonar.stop();//stop sonar
-		// /motorControle.stop();
 		Thread.sleep(200);
 		update.stop();//give update time to give message then stop it
 		Thread.sleep(200);
-		t = null; //may want to uncomment; helps reset thread when it works
+		t = null; // helps reset thread when it works
 	}
 
 	/**
@@ -155,7 +152,9 @@ public class core implements Runnable {
 				running = false;//redudency lol
 			}
 			
-		} else {
+		} else if(!RUN){
+			//told to stop
+		}else {
 			System.out.println("IDK what happened but program stopped");
 			debug.log_err("IDK what happened but program stopped");
 		}
@@ -336,7 +335,7 @@ public class core implements Runnable {
 			}else if(temp >= 98){
 				System.out.println("Way too hot");
 				debug.log("CPU temp too hott: "+SystemInfo.getCpuTemperature());
-				parser.parse("exit");
+				parser.parse("exit");//TODO change
 				return false; //this can be removed if you don't care about this little CPU that tryed
 			}
 		}catch(Exception e){
@@ -366,45 +365,48 @@ public class core implements Runnable {
 	static void init() throws InterruptedException {
 		try{
 			if (!check(4)) {
+				debug.print("System did not pass check, will not init");
 				return; //invalid to run
 			}
 			if (basic.logger_lvl > 0)
 				debug.log("----Initiating system----");
 			System.out.println("----Initiating system----");
-			Thread.sleep(300);// wait
+			
+			/*Thread for update, connection between PI and arduino*/
 			update m4 = new update();
-		
 			update.setUp(PI); 
 			m4.start();
+			Thread.sleep(200);// wait for connection
+			
+			/*Checks if the connection is succsessful*/
 			if (update.self_test()) {
 				System.out.println("Successful connection!");
 			} else {
 				System.out.println("Unable to establish connection");
 			}
 			Thread.sleep(100);
+			
 			// set up IO
-			sonar me = new sonar();
-			me.start();
-			Thread.sleep(300);
-			// motorControle me2 = new motorControle();
-			// me2.start();
-			Thread.sleep(300);
+			//sonar me = new sonar();
+			//me.start();
+
+			Thread.sleep(200);
 			movable me3 = new movable();
 			me3.start();
 			while(!movable.initiated()){
 				Thread.sleep(50);
 			}
-			Thread.sleep(200);
+			Thread.sleep(100);
 			INIT = true;
 			if(true){
 				System.out.println("----System sucsessfully initiated----");
 				if (basic.logger_lvl > 0)
 					debug.log("Init sucsess");
 			}else{
-				System.out.println("Unkown problem occured");
+				debug.log("Unkown problem occured");
 			}
 		}catch(Exception elo){
-			debug.print("Error occured: "+elo);
+			debug.print("Error occured in core.init(): "+elo);
 			debug.log_err(elo.getMessage());
 		}
 	}
@@ -451,7 +453,7 @@ public class core implements Runnable {
 		if (System.console() == null) {
 			System.out.println("No console");
 		}
-		if(!status2()){
+		if(!status()){
 			System.out.println("Failed status");
 		}
 		System.gc();
@@ -716,6 +718,7 @@ public class core implements Runnable {
 		all_info += "\n\tDepth: "+update.get_depth()+"; "+movable.getTarget_depth();
 		
 		return all_info;
-	}public String toString(){return info();}
+	}
+	public String toString(){return info();}
 	public static void Seterror_allow(boolean a){error_allow = a; }
 }

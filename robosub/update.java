@@ -32,14 +32,15 @@ class update implements Runnable{//interface with sensors
     static int init = 0;
     private static final String ard = "/dev/ttyACM0";
     //private static int ard_num = 0;
-    private static final String port = System.getProperty("serial.port", ard);
+    //private static final String port = System.getProperty("serial.port", ard);
+    private static final String port = ard;
     private static final int br = 9600;//Integer.parseInt(System.getProperty("baud.rate", "9600"));
     private static Serial serial;
     private static String output = "[v";
     private static String input = "def";
     static boolean ready = false;
     static int IMU_pitch = 0, IMU_roll = 0, IMU_YAW = 0, depth = 0, waterLvl = 0;
-    static boolean run = false;
+    static boolean RUN = false;
     public static boolean logTraffic = true;//logs the packets sent to Arduino
     public static boolean useReal = true;//if true, actually sends packets. Otherwise, its just a test
     private static int packetNum = 0;//, packetNumIn = 0;//keeps track of packets
@@ -88,7 +89,7 @@ class update implements Runnable{//interface with sensors
             }
     	}*/
     	long start = System.currentTimeMillis();
-        while(run){
+        while(RUN){
             if(serial.isOpen() || !useReal){
                 try{
                     if(ready && (System.currentTimeMillis() >= start+delayTime)){
@@ -102,21 +103,19 @@ class update implements Runnable{//interface with sensors
     					if(logTraffic){
     						log(output);
     					}
-    					if(!IS_PI){
+    					if(!IS_PI){//reads fake input data from input/SerialInFile.txt
     						fakeReadIn();
     					}
                         Thread.sleep((long) (delayTime*.8));
                     }
                 }catch(Exception e){
                     debug.logWithStack("Problem with serial in updater: "+e.getMessage());
-                    System.out.print(e);
+                    System.out.print(e); 
                 }
             } 
         }
-        try{serial.close();}catch(Exception e){System.out.println("Error closing serial: "+e);}
-        synchronized(t){
-            t.notify();
-        }
+        try{if(serial.isOpen()) serial.close();}catch(Exception e){System.out.println("Error closing serial: "+e);}
+        //synchronized(t){t.notify();}
     	try{
     		Thread.sleep(delayTime);
     	}catch(Exception e){
@@ -139,15 +138,13 @@ class update implements Runnable{//interface with sensors
         	serial.addListener(event -> {//add event listener to get data from port
                 String payload = "";
                 try {
-                	Thread.sleep(10);
+                	//Thread.sleep(5);
                     payload = event.getAsciiString();
                 } catch (IOException ioe) {
                     System.out.println("Failed to connect to arduino "+ioe.getMessage());
                     debug.log_err("Failed to connect to arduino "+ioe.getMessage());
                     throw new RuntimeException(ioe);
-                } catch (InterruptedException e) {
-					System.out.println("Error waiting for in); update.setUp(): "+e);
-				}
+                } //catch (InterruptedException e) {System.out.println("Error waiting for in update.setUp(): "+e);}
                 parseIn(payload);//parser input from port(Arduino)
             });
         }
@@ -159,7 +156,7 @@ class update implements Runnable{//interface with sensors
         try {
             if(useReal) serial.open(port, br);//actually opens port
             ready = true;//ready for output
-            run = true;//Successfully started port
+            RUN = true;//Successfully started port
         } catch (IOException ioe) {
         	System.out.println("Error with opening port");
             throw new RuntimeException(ioe);
@@ -200,8 +197,8 @@ class update implements Runnable{//interface with sensors
                    depth = Integer.parseInt(meSplit[3].trim());
                    waterLvl = Integer.parseInt(meSplit[4].trim());        
                }else{
-                   System.out.println("Bad input from ard: "+me);
-                   debug.log("Bad input from ard: "+me);
+                   debug.print("Bad input from ard: "+me);
+                   debug.print("When sent: "+output);
                }
            }   
        }
@@ -211,10 +208,11 @@ class update implements Runnable{//interface with sensors
      * @param motor_vals Values for each motor
      */
     public static void set_motors(int[] motor_vals){
+    	boolean tmp = ready;
         ready = false;//waits for all values to be set
         String newString;
         newString = "[n";//indicates that this will be setting motor values
-        for(int i = 0; i<6; i++){//converts all motor values to int ascii, seporated by commas
+        for(int i = 0; i<6; i++){//converts all motor values to int ascii, separated by commas
         	newString += (motor_vals[i]);
         	newString += ",";
         }
@@ -222,7 +220,7 @@ class update implements Runnable{//interface with sensors
         	newString = "[v";
         }
         set(newString);//set new string and indicates output is ready
-        ready = true;
+        ready = tmp;
     }
     
     /**
@@ -240,7 +238,7 @@ class update implements Runnable{//interface with sensors
         newString += test_num;
         newString += ",";//sets the rest of the values
         try {
-			Thread.sleep(delayTime - 5);
+			Thread.sleep(delayTime - 20);
 		} catch (InterruptedException e1) {System.out.println("Interupt in delay of update.selftest(): "+e1);}
         set(newString);
         ready = true;
@@ -255,7 +253,7 @@ class update implements Runnable{//interface with sensors
         }
         if(!input.trim().equalsIgnoreCase(good_string.trim())){//checks validity of self test
             System.out.println("Bad input from ard on st: " + input);
-            debug.log_err("Bad input from ard on st " + input);
+            debug.log("Bad input from ard on self test: " + input);
             return false;//no coms = bad
         }else{
         	//Good test
@@ -291,12 +289,16 @@ class update implements Runnable{//interface with sensors
         		Thread.sleep(120);//wait for signal to go through
         		if(useReal) serial.close();//close port
         	}catch(Exception e){
+        		System.out.println("Error in update.stop(): "+e);
         		debug.error(e.getMessage());
         	}
     	}
-    	if(run){
-        	run = false;
+    	if(RUN){
+        	RUN = false;
         	System.out.println("Connection terminated");
+    	}
+    	if(t != null){
+    		//t.stop();
     	}
     }
     public static void force_roll_value(int x){
@@ -387,8 +389,11 @@ class update implements Runnable{//interface with sensors
     	me += "; Depth: " + depth;
 		return me;
     }
+    public static String portInfo(){
+    	return ard+"; "+br;
+    }
     public static void resetPort(){
-    	try{serial.close();}catch(Exception e){System.out.println("Error in update.resetPort(): "+e);}
+    	try{if(serial.isOpen()) serial.close();}catch(Exception e){System.out.println("Error in update.resetPort(): "+e);}
     }
     
     public void start() {
@@ -396,7 +401,7 @@ class update implements Runnable{//interface with sensors
             t = new Thread(this, "update");
             t.start();
         }else{
-       	 debug.logWithStack("Second instance being made: update");
+       	 debug.logWithStack("Second instance being made in update: " + t.getName());
         }
     }
 }

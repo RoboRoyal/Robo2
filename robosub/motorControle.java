@@ -1,22 +1,18 @@
 package robosub;
 
-//import org.apache.log4j.Logger;
-
 /**
 * Class to interface between direct motor control and update
+* Checks motor values are within limits, handles enable, and sets max limit of motors
 * @author Dakota
 *
 */
-class motorControle {//implements Runnable{
+class motorControle {
 	public static int form = 0;
-	//private static Logger logger = Logger.getLogger(motorControle.class.getCanonicalName());
 	private static int TopSpeed = 1700; //software defined top speed
 	public static final int max_speed = 1750;//this is a very conservative max and min for the motors
 	public static final int min_speed = 1250;//too high or too low can danmage them. Hardware limit
 	//however, you can adjust if you need more power
 	//Actual max and min values of current motor servo controlers are 1100-1900
-	
-	//static boolean init = false;//old
 	static int[] motor_vals = {1500,1500,1500,1500,1500,1500};//FLM,FRM,BLM,BRM,LM,RM
 	static boolean[] motor_enable = {true, true, true, true, true, true};
 	private static boolean invertVerticalMotors = false;
@@ -61,7 +57,7 @@ class motorControle {//implements Runnable{
 				motor_vals[i]=motors[i-4];
 			}
 		}else{
-			if(core.no_fill()){
+			if(core.no_fill()){//force setting these motors anyways
 				for(int i=0;i<6;i++){
 					if(invertVerticalMotors && i <=4){
 						motors[i] = 3000-motors[i];
@@ -81,16 +77,27 @@ class motorControle {//implements Runnable{
 		}
 		update.set_motors(motor_vals);
 	}
-	public static void motor_enable(int mot, boolean en){
-		debug.print("Motor "+mot+" set to "+en);
-		motor_enable[mot] = en;
+	/**
+	 * Enable or disables motors
+	 * @param mot The motor to change state of
+	 * @param enable true = on/enables, false = off/disabled
+	 */
+	public static void motor_enable(int mot, boolean enable){
+		try{motor_enable[mot] = enable;}catch(ArrayIndexOutOfBoundsException e){System.out.println("Out of bounds: "+e); return;}
+		debug.print("Motor "+mot+" set to "+enable);
 	}
+	
+	/**
+	 * Sets the maximum speed of the motors. Speed is offset from 1500
+	 * Range: ~150 - 250
+	 * @param newSpeed New top speed 
+	 */
 	public static void setTopSpeed(int newSpeed){
-		if(newSpeed > max_speed){
+		if(newSpeed + 1500 > max_speed){
 			System.out.println("Warning; invalid motor value, value too high.");
 			newSpeed = max_speed;
 		}
-		if(newSpeed < min_speed){
+		if(1500 - newSpeed < min_speed){
 			System.out.println("Warning; invalid motor value, value too low.");
 			newSpeed = min_speed;
 		}

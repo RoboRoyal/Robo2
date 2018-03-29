@@ -36,8 +36,15 @@ public class basic {
 	private static boolean exitBefore = false;
 	//private static Logger logger = Logger.getLogger(basic.class.getCanonicalName());
 
+	/*TODO
+	 * add in option for run without parser thread
+	 * better start and shut with NEW core
+	 * better variable handling
+	 * startup/config NEW debug(GPIO)
+	 * 
+	 */
+	
 	public static void main(String[] args) {
-		//BasicConfigurator.configure();
 		try{
 			master(args);
 			//SonarInterface.updateDir();
@@ -58,7 +65,7 @@ public class basic {
 		debug.log("System started at: "+dateFormat.format(date));
 		debug.log("System started at: "+System.currentTimeMillis());//This wont print anything if log is deleted in config
 		if (args.length > 1) {
-			System.out.print("I should add that in, okay, hold on, there, did it");
+			System.out.print("I should add that in, okay, hold on, ok, there, I did it");
 			parser.parse(args);
 		}
 		parser me2 = new parser();
@@ -74,7 +81,7 @@ public class basic {
 			System.out.print("How did you manage to mess THAT up?: "+e);
 			e.printStackTrace();
 			debug.error("They managed to mess up start: "+e.getMessage());
-			//Should probably exit, but 
+			//Should probably exit, but... whatever. youre prob, not mine
 		}
 		
 	}
@@ -132,7 +139,6 @@ public class basic {
 	}
 
 	private static void start_with_init() {
-		// System.getProperties().list(System.out);
 		debug.blink();
 		try {
 			if (!core.INIT) {
