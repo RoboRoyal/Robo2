@@ -33,7 +33,7 @@ public class parser implements Runnable {
 				String line = in.nextLine();
 				if(log_parser || basic.logger_lvl >= 4) debug.log("Parser line input: "+line);
 				parser.parse(line);
-			}catch(Exception e){}
+			}catch(Exception e){debug.print("Error in parser.star():" + e);}
 		}
 		in.close();
 	}
@@ -388,7 +388,6 @@ public class parser implements Runnable {
 				}
 				RUN = false;
 				break;
-
 			case "update_force_water":
 					x++;
 					update.waterLvl = Integer.valueOf(arg[x]);

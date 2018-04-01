@@ -138,13 +138,12 @@ class update implements Runnable{//interface with sensors
         	serial.addListener(event -> {//add event listener to get data from port
                 String payload = "";
                 try {
-                	//Thread.sleep(5);
                     payload = event.getAsciiString();
                 } catch (IOException ioe) {
                     System.out.println("Failed to connect to arduino "+ioe.getMessage());
                     debug.log_err("Failed to connect to arduino "+ioe.getMessage());
                     throw new RuntimeException(ioe);
-                } //catch (InterruptedException e) {System.out.println("Error waiting for in update.setUp(): "+e);}
+                }
                 parseIn(payload);//parser input from port(Arduino)
             });
         }
@@ -295,8 +294,12 @@ class update implements Runnable{//interface with sensors
     	}
     	if(RUN){
         	RUN = false;
-        	System.out.println("Connection terminated");
+        	debug.print("Connection terminated");
     	}
+    	if(serial.isOpen()){
+    		try{serial.close();}catch(Exception e){debug.error(e.getMessage());}
+    	}
+    	try{SerialFactory.shutdown();}catch(Exception e){debug.error(e.getMessage());}
     	if(t != null){
     		//t.stop();
     	}

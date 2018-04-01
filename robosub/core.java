@@ -317,13 +317,13 @@ public class core implements Runnable {
 			return false;// we are taking on water, abort!
 		}
 		if (Math.abs(update.IMU_pitch()) > 20 || Math.abs(update.IMU_roll()) > 20) {
-			System.out.println("Pitch or roll too great, shutting down for safty;");
+			System.out.println("Unsafe pitch/roll!");
 			System.out.println("pitch: " + update.IMU_pitch() + " roll: " + update.IMU_roll());
-			if (basic.logger_lvl > 0)
+			/*if (basic.logger_lvl > 0)
 				debug.log("pithc/roll too great;");
 			if (basic.logger_lvl > 0)
-				debug.log("pitch: " + update.IMU_pitch() + " roll: " + update.IMU_roll());
-			debug.log_err("Bad stable: pitch: " + update.IMU_pitch() + " roll: " + update.IMU_roll());
+				debug.log("pitch: " + update.IMU_pitch() + " roll: " + update.IMU_roll());*/
+			debug.log("Bad stable: pitch: " + update.IMU_pitch() + " roll: " + update.IMU_roll());
 			return false;
 		}
 		//TODO check anything else, tmp, battery level etc.
