@@ -439,7 +439,7 @@ public class core implements Runnable {
 			if(System.getProperty("os.arch").toLowerCase().contains("arm")){
 				good = true;
 				PI = true;
-				System.out.println("Is PI");
+				System.out.println("Detected running on real pi");
 			}else{
 				System.out.println("Linux, not running on PI");
 				good = false;
@@ -705,7 +705,7 @@ public class core implements Runnable {
 		}
 		String name = null;
 		try{name = basic.mode_names[mode];}catch(Exception e){name = "No name";}
-		String all_info = "System temp: "+temp;
+		String all_info = "System temp: "+temp+",  Water Level: " + update.waterLvl;
 		all_info += "\nSystem Status: "+status();
 		all_info += "\nIs PI: "+PI;
 		all_info += "\nInit, Run & Connected: "+INIT+", "+RUN + ", "+update.self_test();

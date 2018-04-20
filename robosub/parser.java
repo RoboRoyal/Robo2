@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 import com.pi4j.system.SystemInfo;
 
+import Sonar.util.SonarInterface;
+
 //import Sonar.util.Sonar_Test;
 
 //import org.apache.log4j.Logger;
@@ -19,7 +21,7 @@ import com.pi4j.system.SystemInfo;
 public class parser implements Runnable {
 	Thread t;
 	private static boolean log_parser = false;
-	static boolean RUN = true;
+	static boolean RUN = false;
 
 	/**
 	 * Main method of this class. Provides the interface for the shell and gets user input
@@ -90,6 +92,7 @@ public class parser implements Runnable {
 		System.out.println("wait [int] wait [#] miliseconds before starting");
 		System.out.println("start to start prog");
 		System.out.println("shut for shutdown");
+		System.out.println("help for more info");
 		}else if(i == 1){
 			System.out.println("stop stop lateral movement");
 			System.out.println("send [string] to arduino, return answer");
@@ -300,6 +303,9 @@ public class parser implements Runnable {
 			/*case "enter":
 				update.force_update_parseIn(arg[++x]);
 				break;*/
+			case "testSonar":
+				SonarInterface.updateDir();
+				break;
 			case "name":
 				displayName();
 				break;
@@ -563,6 +569,7 @@ public class parser implements Runnable {
 		}
 	}
 	public void start() {
+		RUN = true;
 		if (t == null) {
 			t = new Thread(this, "parser");
 			t.start();
