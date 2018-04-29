@@ -25,7 +25,7 @@ import com.pi4j.io.serial.SerialPortException;
  *
  */
 @SuppressWarnings("unused")
-class update implements Runnable {// interface with sensors
+public class update implements Runnable {// interface with sensors
 	private static int delayTime = 100;// ms
 	static boolean IS_PI;
 	private static Thread t;
@@ -51,6 +51,8 @@ class update implements Runnable {// interface with sensors
 	private static String last = null;
 	private static boolean logSerialIn = true;
 	private static String last2;
+	static boolean puase = false;
+	public static void puase(boolean en){puase = en;}//TODO
 
 	public static int get_depth() {
 		return depth;
@@ -86,6 +88,8 @@ class update implements Runnable {// interface with sensors
 	public void run() {
 		long start = System.currentTimeMillis();
 		while (RUN) {
+			while(puase)
+				try{Thread.sleep(100);}catch(Exception e){debug.print("Error in update puase");}
 			if (serial.isOpen() || !useReal) {
 				try {
 					if (ready && (System.currentTimeMillis() >= start + delayTime)) {
