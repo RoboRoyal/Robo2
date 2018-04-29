@@ -4,8 +4,8 @@ public class SonarExec implements Runnable {
 	private boolean RUN = false;
 	private Thread t;
 	//private pingerReader left, right;
-	static String left = "left.txt";
-	static String right = "right.txt";
+	static String left = "SonarUtil/left.txt";
+	static String right = "SonarUtil/right.txt";
 	
 	public static int light(){
 		int dir = 0;
