@@ -37,14 +37,14 @@ class update implements Runnable {// interface with sensors
 	//private static final String port = ard;
 	//private static final int br = 9600;
 	private static final int br = Integer.parseInt(System.getProperty("baud.rate","9600"));
-	private static Serial serial;
+	private static Serial serial = SerialFactory.createInstance();
 	private static String output = "[v";
 	private static String input = "def";
 	static boolean ready = false;
 	static int IMU_pitch = 0, IMU_roll = 0, IMU_YAW = 0, depth = 0, waterLvl = 0;
 	static boolean RUN = false;
 	public static boolean logTraffic = true;// logs the packets sent to Arduino
-	public static boolean useReal = true;// if true, actually sends packets.
+	public static final boolean useReal = true;// if true, actually sends packets.
 											// Otherwise, its just a test
 	private static int packetNum = 0;// , packetNumIn = 0;//keeps track of
 										// packets
@@ -162,8 +162,9 @@ class update implements Runnable {// interface with sensors
 			log("Opening port [" + port + ":" + Integer.toString(br) + "]");
 		}
 		try {
-			if (useReal)
+			if (useReal){
 				serial.open(port, br);// actually opens port
+			}
 			ready = true;// ready for output
 			RUN = true;// Successfully started port
 		} catch (IOException ioe) {
@@ -173,6 +174,7 @@ class update implements Runnable {// interface with sensors
 		} catch (Exception e) {
 			System.out.println("Error opeing port in update.setup() is: " + e.getMessage());
 			debug.log("Error opening port in update.setUp(): " + e);
+			e.printStackTrace();
 		}
 		System.out.println("Port is opened.");
 	}
