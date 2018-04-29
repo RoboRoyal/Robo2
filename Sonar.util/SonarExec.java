@@ -62,8 +62,8 @@ public class SonarExec implements Runnable {
 		//close everything with end()
 	}
 	public void setup(){
-		left = new pingerReader("dosent.exist", "LEFT");
-		right = new pingerReader("dosent.exist2", "RIGHT");
+		//left = new pingerReader("dosent.exist", "LEFT");
+		//right = new pingerReader("dosent.exist2", "RIGHT");
 		//start py prog?
 		//set up socket connection
 		//test connect
