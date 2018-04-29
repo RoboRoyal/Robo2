@@ -50,5 +50,9 @@ public class SPI_int implements Runnable {
 			t.start();
 		}
 	}
+
+	public static void shut() {
+		gpio.shutdown();
+	}
 	
 }

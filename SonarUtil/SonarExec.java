@@ -1,7 +1,11 @@
 package SonarUtil;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 
 import robosub.movable;
@@ -10,9 +14,21 @@ import robosub.update;
 public class SonarExec implements Runnable {
 	private boolean RUN = false;
 	private Thread t;
+	private static final boolean saveFiles = false;
 	// private pingerReader left, right;
 	static String left = "left.txt";
 	static String right = "right.txt";
+	
+	public static void save(String file,int[] data){
+		StringBuilder temp = new StringBuilder();
+		try (Writer logOut = new BufferedWriter(new FileWriter(new File(file),true))) {
+			for(int t : data)
+				temp.append(t+"\n");
+			logOut.write(temp.toString());
+		} catch (IOException e) {
+			System.out.print("Problem writing to file from SonarExec.save(): " + e);
+		}finally{/*Finally*/}
+	}
 	
 	public static int[] convert(ArrayList<Integer> dataIn, int size){
 		final int con = 16;
@@ -28,35 +44,42 @@ public class SonarExec implements Runnable {
 		int bucket = 0;
 		SPI_int left = new SPI_int(0);
 		//SPI_int right = new SPI_int(1);
-		SPI_int right = new SPI_int(0);
+		//SPI_int right = new SPI_int(0);
 		movable.puase(true);
 		update.puase(true);
 		left.start();
-		right.start();
+		//right.start();
 		try {
 			left.t.join();
-			right.t.join();
+			//right.t.join();
+			SPI_int.shut();
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		movable.puase(true);
-		update.puase(true);
+		movable.puase(false);
+		update.puase(false);
 		
 		int min = left.data.size();
-		if (min > right.data.size())
-			min = right.data.size();
+		/*if (min > right.data.size())
+			min = right.data.size();*/
 		min = min - 1;
 		if(min < 0){
 			System.out.println("Error in sonarExec lighterer() 44");
 			return 0;
 		}		
 		System.out.println("Min: " + min);
+		
 		if(min > 20 * 1000 ){
 			Search.left = convert(left.data, min);
-			Search.right = convert(right.data, min);
+			//Search.right = convert(right.data, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
+			if(saveFiles){
+				long tm = System.currentTimeMillis();
+				save("left_"+tm+".txt",Search.left);
+				save("right_"+tm+".txt",Search.right);
+			}
 			try {
 				bucket = Search.findBucket();
 				System.out.println("Bucket is: " + bucket);
