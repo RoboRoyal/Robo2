@@ -82,7 +82,7 @@ public class Sonar_Test {
 		}
 		return size;	
 	}
-	private static int getSize(String file){
+	static int getSize(String file){
 		int x = 0;
 		try (Scanner in = new Scanner(new File(file))) {
 			double line;
