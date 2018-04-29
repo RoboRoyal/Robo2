@@ -8,7 +8,9 @@ import java.util.Scanner;
 
 import com.pi4j.system.SystemInfo;
 
-import Sonar.util.SonarInterface;
+import Sonar.util.SonarExec;
+
+//import Sonar.util.SonarInterface;
 
 //import Sonar.util.Sonar_Test;
 
@@ -304,7 +306,7 @@ public class parser implements Runnable {
 				update.force_update_parseIn(arg[++x]);
 				break;*/
 			case "testSonar":
-				SonarInterface.updateDir();
+				//SonarInterface.updateDir();
 				break;
 			case "name":
 				displayName();
@@ -457,6 +459,8 @@ public class parser implements Runnable {
 			case "?":
 				help(2);
 				break;
+			case "light":
+				System.out.println(SonarExec.light());
 			default:
 				System.out.println("Invalid: " + arg[x]);
 				throw new IllegalArgumentException("Invalid statment");
