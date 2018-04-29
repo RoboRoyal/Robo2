@@ -16,6 +16,7 @@ public class SPI_int implements Runnable {
 	Thread t;
 	ArrayList<Integer> data = new ArrayList<Integer>();
 	SpiChannel chan = SpiChannel.CS0;
+	
 	public SPI_int(int SPI_con) {
 		if(SPI_con == 1)
 			chan = SpiChannel.CS1;
@@ -52,7 +53,7 @@ public class SPI_int implements Runnable {
 	}
 
 	public static void shut() {
-		gpio.shutdown();
+		//gpio.shutdown();
 	}
 	
 }
