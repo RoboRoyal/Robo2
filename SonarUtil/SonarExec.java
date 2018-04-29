@@ -22,6 +22,7 @@ public class SonarExec implements Runnable {
 		if(Sonar_Test.size(left)>Sonar_Test.getSize(right))
 			min = Sonar_Test.size(right);
 		
+		System.out.println("Min: " + min);
 		Search.left=Sonar_Test.readInSmall(left,min);
 		Search.right=Sonar_Test.readInSmall(right,min);
 		System.out.println("Got data; "+Search.left.length+", "+Search.right.length);
