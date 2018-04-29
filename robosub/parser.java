@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.pi4j.system.SystemInfo;
 
 import SonarUtil.SonarExec;
+import SonarUtil.Sonar_Test;
 
 //import Sonar.util.SonarInterface;
 
@@ -273,6 +274,9 @@ public class parser implements Runnable {
 				x++;
 				core.shutOnFinish = isTrue(arg[x]);//(arg[x].equalsIgnoreCase("true") || arg[x].equalsIgnoreCase("t"));
 				break;
+			case "getSize":
+				x++;
+				System.out.println(Sonar_Test.getSize(arg[x]));
 			case "waitForFinish":
 				while(core.running){
 					Thread.sleep(100);
