@@ -1,4 +1,4 @@
-javac Sonar.util/*.java
+javac SonarUtil/*.java
 javac robosub/*.java
 
 
