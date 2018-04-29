@@ -95,7 +95,8 @@ public class core implements Runnable {
 			case (2):
 			case(12):
 				//int nextDir = SonarExec.light();
-				int nextDir = SonarExec.lighter();
+				//int nextDir = SonarExec.lighter();
+				int nextDir = SonarExec.lighterer();
 				debug.print("Next dir is: "+nextDir);
 				movable.moveInDir_R(nextDir);
 				break;
