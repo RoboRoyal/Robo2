@@ -21,7 +21,7 @@ public class SPI_int implements Runnable {
 			chan = SpiChannel.CS1;
 	}
 
-	public void getVals(){
+	public void getVals() throws Exception{
 		final GpioController gpio = GpioFactory.getInstance();
         // Create custom MCP3008 analog gpio provider
         // we must specify which chip select (CS) that that ADC chip is physically connected to.
@@ -40,8 +40,8 @@ public class SPI_int implements Runnable {
 	public void run() {
 		try {
 			getVals();
-		} catch (Exception e) {
-			e.printStackTrace();
+		}catch(Exception e){System.out.println("Error SPI: "+e);
+		e.getStackTrace();
 		}
 	}
 	public void start() {
