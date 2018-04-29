@@ -59,10 +59,24 @@ public class Sonar_Test {
 		return numbers;	
 	}
 	
+	
+	public static int[] readInSmall(String file, int size){
+		int[] numbers = new int[size];
+		try (Scanner in = new Scanner(new File(file))) {
+			for(int index = 0;index < size;index++){
+				numbers[index] = (in.nextInt());
+			}
+		}catch(Exception e){
+			System.out.println("Error; problem parsing data file: "+e);
+		}
+		return numbers;	
+	}
+	
 	public static int size(String file){
 		int size = 0;
 		try{
-			System.out.println(new File(file).length());
+			size = (int) new File(file).length();
+			//System.out.println(new File(file).length());
 		}catch(Exception e){
 			System.out.println("Error; problem parsing data file: "+e);
 		}
