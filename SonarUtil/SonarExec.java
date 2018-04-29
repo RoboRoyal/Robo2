@@ -14,8 +14,8 @@ public class SonarExec implements Runnable {
 		me.start();
 		System.out.println(me.send("start"));
 		me.waitEnd();
-		System.out.println(me.send("close"));
-		me.close();
+		//System.out.println(me.send("close"));
+		//me.close();
 		try{Thread.sleep(100);}catch(Exception e){}
 		
 		int min = Sonar_Test.getSize(left);

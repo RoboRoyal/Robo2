@@ -82,12 +82,12 @@ public class Sonar_Test {
 		}
 		return size;	
 	}
-	static int getSize(String file){
+	public static int getSize(String file){
 		int x = 0;
 		try (Scanner in = new Scanner(new File(file))) {
-			double line;
-			while (in.hasNextDouble()) {
-				line = in.nextDouble();
+			String line;
+			while (in.hasNext()) {
+				line = in.nextLine();
 				x++;
 			}
 		}catch(Exception e){
