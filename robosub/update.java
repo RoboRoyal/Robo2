@@ -33,11 +33,10 @@ class update implements Runnable {// interface with sensors
 	static int init = 0;
 	private static final String ard = "/dev/ttyACM0";
 	// private static int ard_num = 0;
-	// private static final String port = System.getProperty("serial.port",
-	// ard);
-	private static final String port = ard;
-	private static final int br = 9600;// Integer.parseInt(System.getProperty("baud.rate",
-										// "9600"));
+	private static final String port = System.getProperty("serial.port",ard);
+	//private static final String port = ard;
+	//private static final int br = 9600;
+	private static final int br = Integer.parseInt(System.getProperty("baud.rate","9600"));
 	private static Serial serial;
 	private static String output = "[v";
 	private static String input = "def";
@@ -153,8 +152,8 @@ class update implements Runnable {// interface with sensors
 					parseIn(payload);// parser input from port(Arduino)
 				});
 			} catch (Exception e) {
-				System.out.println("Failed in update.setUp(): " + e.getMessage());
-				debug.log_err("Failed in update.setUp(): " + e.getMessage());
+				System.out.println("Failed in update.setUp(): " + e.getClass()+" "+e.getMessage());
+				debug.log_err("Failed in update.setUp(): " + e.getClass()+" "+e.getMessage());
 			}
 		}
 		System.out.println("Opening port [" + port + ":" + Integer.toString(br) + "]");
