@@ -1,5 +1,5 @@
 javac SonarUtil/*.java
-javac robosub/*.java
+pi4j --compile robosub/*.java
 
 
 python3 sonar.util/core.py
