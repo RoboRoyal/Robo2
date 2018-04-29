@@ -44,7 +44,7 @@ class update implements Runnable {// interface with sensors
 	static int IMU_pitch = 0, IMU_roll = 0, IMU_YAW = 0, depth = 0, waterLvl = 0;
 	static boolean RUN = false;
 	public static boolean logTraffic = true;// logs the packets sent to Arduino
-	public static final boolean useReal = true;// if true, actually sends packets.
+	public static boolean useReal = true;// if true, actually sends packets.
 											// Otherwise, its just a test
 	private static int packetNum = 0;// , packetNumIn = 0;//keeps track of
 										// packets
