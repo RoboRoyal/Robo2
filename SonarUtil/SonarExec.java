@@ -43,15 +43,15 @@ public class SonarExec implements Runnable {
 		int dir = 0;
 		int bucket = 0;
 		SPI_int left = new SPI_int(0);
-		//SPI_int right = new SPI_int(1);
+		SPI_int right = new SPI_int(1);
 		//SPI_int right = new SPI_int(0);
 		movable.puase(true);
 		update.puase(true);
 		left.start();
-		//right.start();
+		right.start();
 		try {
 			left.t.join();
-			//right.t.join();
+			right.t.join();
 			SPI_int.shut();
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -62,11 +62,11 @@ public class SonarExec implements Runnable {
 		update.puase(false);
 		
 		int min = left.data.size();
-		/*if (min > right.data.size())
-			min = right.data.size();*/
+		if (min > right.data.size())
+			min = right.data.size();
 		min = min - 1;
 		if(min < 0){
-			System.out.println("Error in sonarExec lighterer() 44");
+			System.out.println("Error in sonarExec lighterer() 44: min is -1");
 			return 0;
 		}		
 		System.out.println("Min: " + min);
