@@ -1,3 +1,4 @@
+rm -rf *
 git clone https://github.com/RoboRoyal/Robo2
 cd Robo2
 
@@ -6,4 +7,4 @@ pi4j --compile robosub/*.java
 
 
 python3 SonarUtil/core.py
- pi4j --run robosub/basic
+pi4j --run robosub/basic
