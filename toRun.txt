@@ -6,4 +6,4 @@ pi4j --compile robosub/*.java
 
 
 python3 SonarUtil/core.py
-java robosub/basic
+ pi4j --run robosub/basic
