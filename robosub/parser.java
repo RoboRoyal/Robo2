@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import com.pi4j.system.SystemInfo;
 
-import Sonar.util.SonarExec;
+import SonarUtil.SonarExec;
 
 //import Sonar.util.SonarInterface;
 

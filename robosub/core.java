@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import com.pi4j.system.SystemInfo;
 
-import Sonar.util.SonarExec;
+import SonarUtil.SonarExec;
 
 //import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
