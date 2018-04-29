@@ -7,6 +7,7 @@ public class Search {
 	static int boxes;
 	static int size;
 	static int detection;
+	public static final int thresh = 512;//20480*16;
 	
 	public static int tmp(double[] data, int freq){
 		for(int index = 0; index < data.length-size; index++){
@@ -74,7 +75,7 @@ public class Search {
 		int max_value = -1;
 		int left_time = -1, right_time = -1;
 		boolean found_left = false, found_right = false;
-		final int max_scan_size = 32000;
+		final int max_scan_size = left.length;
 		for(int index = 1; index<max_scan_size-simple-2;index++){
 			int[] left_tmp = Arrays.copyOfRange(left_data, index, index+simple);
 			int[] right_tmp = Arrays.copyOfRange(right_data, index, index+simple);
@@ -90,12 +91,12 @@ public class Search {
 					}
 				}
 			}
-			if(!do_search && left_fft[bucket] > 20480*16 && !found_left){
+			if(!do_search && left_fft[bucket] > thresh && !found_left){
 				//System.out.println("ME : "+left_fft[bucket]+", index: "+index);
 				left_time = index;
 				found_left = true;
 			}
-			if(!do_search && right_fft[bucket] > 20480*16 && !found_right){
+			if(!do_search && right_fft[bucket] > thresh && !found_right){
 				//System.out.println("ME2 : "+right_fft[bucket]+", index: "+index);
 				right_time = index;
 				found_right = true;
