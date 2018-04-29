@@ -6,8 +6,8 @@ public class SonarExec implements Runnable {
 	private boolean RUN = false;
 	private Thread t;
 	// private pingerReader left, right;
-	static String left = "SonarUtil/left.txt";
-	static String right = "SonarUtil/right.txt";
+	static String left = "left.txt";
+	static String right = "right.txt";
 
 	public static int lighter() {
 		int dir = 0;
@@ -17,7 +17,6 @@ public class SonarExec implements Runnable {
 			// Process p2 = Runtime.getRuntime().exec("python3 right.py ");
 			p.waitFor();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
@@ -26,7 +25,7 @@ public class SonarExec implements Runnable {
 		}
 
 		int min = Sonar_Test.getSize(left);
-		if (Sonar_Test.size(left) > Sonar_Test.getSize(right))
+		if (min > Sonar_Test.getSize(right))
 			min = Sonar_Test.getSize(right);
 		min = min - 1;
 		System.out.println("Min: " + min);
