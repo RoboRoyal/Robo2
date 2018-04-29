@@ -1,7 +1,11 @@
 package SonarUtil;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
+
+import robosub.movable;
+import robosub.update;
 
 public class SonarExec implements Runnable {
 	private boolean RUN = false;
@@ -25,21 +29,31 @@ public class SonarExec implements Runnable {
 		SPI_int left = new SPI_int(0);
 		//SPI_int right = new SPI_int(1);
 		SPI_int right = new SPI_int(0);
+		movable.puase(true);
+		update.puase(true);
 		left.start();
 		right.start();
 		try {
 			left.t.join();
 			right.t.join();
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		movable.puase(true);
+		update.puase(true);
 		
 		int min = left.data.size();
 		if (min > right.data.size())
 			min = right.data.size();
 		min = min - 1;
+		if(min < 0){
+			System.out.println("Error in sonarExec lighterer() 44");
+			return 0;
+		}		
 		System.out.println("Min: " + min);
-		if(min > 60000 ){
+		if(min > 20 * 1000 ){
 			Search.left = convert(left.data, min);
 			Search.right = convert(right.data, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
@@ -58,7 +72,7 @@ public class SonarExec implements Runnable {
 				e.printStackTrace();
 			}
 		}else{
-			System.out.print("Too few samples to work: " + min);
+			System.out.println("Too few samples to work: " + min);
 		}
 		return dir;
 	}
@@ -84,7 +98,7 @@ public class SonarExec implements Runnable {
 			min = Sonar_Test.getSize(right);
 		min = min - 1;
 		System.out.println("Min: " + min);
-		if(min > 13000 ){
+		if(min < 13000 ){
 			Search.left = Sonar_Test.readInSmall(left, min);
 			Search.right = Sonar_Test.readInSmall(right, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
