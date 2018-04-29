@@ -1,5 +1,6 @@
+javac Sonar.util/*.java
 javac robosub/*.java
-javac sonar.util/*.java
+
 
 python3 sonar.util/core.py
 java robosub/basic
