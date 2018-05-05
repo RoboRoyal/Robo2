@@ -138,6 +138,11 @@ public class parser implements Runnable {
 				Sonar_Test.testSonar();
 				System.out.println("Time taken: "+(System.currentTimeMillis()-start));
 				break;
+			case "test_snav":
+				long start2 = System.currentTimeMillis();
+				System.out.println(SonarExec.lighterer());
+				System.out.println("Time taken: "+(System.currentTimeMillis()-start2));
+				break;
 			case "showleft":
 				Search.showLeft();
 				break;
