@@ -94,12 +94,7 @@ public class core implements Runnable {
 			break;
 			case (2):
 			case(12):
-				int nextDir = 0;
-				//int nextDir = SonarExec.light();
-				//int nextDir = SonarExec.lighter();
-				try{nextDir = SonarExec.lighterer();}catch(Exception e){System.out.println("err in case12: "+e);}
-				debug.print("Next dir is: "+nextDir);
-				movable.moveInDir_R(nextDir);
+				SonarNav();
 				break;
 			case (3):
 				System.out.println("Running");
@@ -174,6 +169,24 @@ public class core implements Runnable {
 		running = false;
 		//Stop for now
 		movable.stop();
+	}
+	
+	public static void SonarNav(){
+		int nextDir = 0;
+		if(PI){//If we are running on real PI
+			//get next dir from SonarExec
+			try{nextDir = SonarExec.lighterer();}catch(Exception e){debug.print("err in case12: "+e);}
+			debug.print("Next dir is: "+nextDir);
+			movable.moveInDir_R(nextDir);
+		}else{
+			//choose random dir
+			nextDir = (int) (30*Math.random()-15);
+			debug.print("Faking move dir: "+nextDir);
+			movable.moveInDir_R(nextDir);
+		}
+		//int nextDir = SonarExec.light();
+		//int nextDir = SonarExec.lighter();
+		
 	}
 
 	private static boolean test2(int step) {

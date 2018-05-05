@@ -16,7 +16,7 @@ import com.pi4j.io.serial.SerialPortException;
  * and Linx when not running on the PI. This will simply print the output
  * packets to a text file. DO NOT put port these dummy libraries to the PI. Be
  * careful when changing anything in this class, espeshally setUp, parseIn,
- * self_test and run This code is not all that well written. Its not efficient,
+ * self_test and run. This code is not all that well written. Its not efficient,
  * no error correction, or anything like that. With that said, it is robust
  * enough and never crashes. Also, its pretty darn accurate, even with no error
  * correction.
@@ -26,16 +26,13 @@ import com.pi4j.io.serial.SerialPortException;
  */
 @SuppressWarnings("unused")
 public class update implements Runnable {// interface with sensors
-	private static int delayTime = 100;// ms
+	private static short delayTime = 100;// ms, 100ms is 10Hz refresh
 	static boolean IS_PI;
 	private static Thread t;
 	private static int mod = 0;
 	static int init = 0;
 	private static final String ard = "/dev/ttyACM0";
-	// private static int ard_num = 0;
 	private static final String port = System.getProperty("serial.port",ard);
-	//private static final String port = ard;
-	//private static final int br = 9600;
 	private static final int br = Integer.parseInt(System.getProperty("baud.rate","9600"));
 	private static Serial serial = SerialFactory.createInstance();
 	private static String output = "[v";
@@ -52,7 +49,7 @@ public class update implements Runnable {// interface with sensors
 	private static boolean logSerialIn = true;
 	private static String last2;
 	static boolean puase = false;
-	public static void puase(boolean en){puase = en;}//TODO
+	public static void puase(boolean enable){puase = enable;}
 
 	public static int get_depth() {
 		return depth;
@@ -67,11 +64,6 @@ public class update implements Runnable {// interface with sensors
 		return depth;
 	}
 
-	/*
-	 * public static double sonar_dist(double freq){ return -1; } public static
-	 * double sonar_dir(double freq){ return -1; } public static double
-	 * sonar_depth(double freq, double current_depth){ return -1; }
-	 */
 	public static int IMU_roll() {
 		return IMU_roll;
 	}
@@ -89,7 +81,7 @@ public class update implements Runnable {// interface with sensors
 		long start = System.currentTimeMillis();
 		while (RUN) {
 			while(puase)
-				try{Thread.sleep(100);}catch(Exception e){debug.print("Error in update puase");}
+				try{Thread.sleep(delayTime);}catch(Exception e){debug.print("Error in update puase");}
 			if (serial.isOpen() || !useReal) {
 				try {
 					if (ready && (System.currentTimeMillis() >= start + delayTime)) {
@@ -108,7 +100,9 @@ public class update implements Runnable {// interface with sensors
 										// input/SerialInFile.txt
 							fakeReadIn();
 						}
-						Thread.sleep((long) (delayTime * .8));
+						Thread.sleep((long) (delayTime * .9));
+					}else{
+						Thread.sleep(1);
 					}
 				} catch (Exception e) {
 					debug.logWithStack("Problem with serial in updater: " + e.getMessage());
@@ -202,8 +196,7 @@ public class update implements Runnable {// interface with sensors
 		if (!me.equals(input)) {
 			try {
 				Thread.sleep(5);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 			init = 2;
 			input = me;
 			if (input.length() >= 10 && me.startsWith("Running self test")) {// checks
@@ -221,7 +214,7 @@ public class update implements Runnable {// interface with sensors
 					depth = Integer.parseInt(meSplit[3].trim());
 					waterLvl = Integer.parseInt(meSplit[4].trim());
 				} else {
-					debug.print("Bad input from ard: " + me);
+					debug.print("Bad input from ard while parsing input: " + me);
 					debug.print("When sent: " + output);
 				}
 			}
@@ -259,7 +252,7 @@ public class update implements Runnable {// interface with sensors
 	public static boolean self_test() {
 		if (core.no_fill() || !IS_PI || !useReal) {// if no_fill or not an
 													// actual PI,
-			return true;// there is no point in actually running the test
+			return RUN;// there is no point in actually running the test
 		}
 		ready = false;// prepairs output
 		String newString = "[t ";// indicates that this is a self test
@@ -367,7 +360,7 @@ public class update implements Runnable {// interface with sensors
 		return delayTime;
 	}
 
-	public static void setDelayTime(int delayTime) {
+	public static void setDelayTime(short delayTime) {
 		update.delayTime = delayTime;
 	}
 
@@ -450,17 +443,33 @@ public class update implements Runnable {// interface with sensors
 
 	}
 
-	public static String ToString() {
+	/**
+	 * Returns info about all values recorded from Update
+	 * @return
+	 */
+	public String toString() {
 		String me = "Pitch: " + IMU_pitch;
 		me += "; Yaw: " + IMU_YAW;
 		me += "; Roll: " + IMU_roll;
 		me += "; Water: " + waterLvl;
 		me += "; Depth: " + depth;
+		me += "; Last packet in: "+input;
+		me += "; Port info: "+portInfo();
+		return me;
+	}
+	
+	public static String ToString(){
+		String me = "Pitch: " + IMU_pitch;
+		me += "; Yaw: " + IMU_YAW;
+		me += "; Roll: " + IMU_roll;
+		me += "; Water: " + waterLvl;
+		me += "; Depth: " + depth;
+		me += "; Last packet in: "+input;
 		return me;
 	}
 
 	public static String portInfo() {
-		return ard + "; " + br;
+		return ard + ": " + br;
 	}
 
 	public static void resetPort() {

@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.pi4j.system.SystemInfo;
 
+import SonarUtil.Search;
 import SonarUtil.SonarExec;
 import SonarUtil.Sonar_Test;
 
@@ -133,7 +134,12 @@ public class parser implements Runnable {
 			if(arg[x].contains("#")){x=arg.length+1; break;}
 			switch (arg[x]) {
 			case "test_sonar":
-				//Sonar_Test.testSonar();
+				long start = System.currentTimeMillis();
+				Sonar_Test.testSonar();
+				System.out.println("Time taken: "+(System.currentTimeMillis()-start));
+				break;
+			case "showleft":
+				Search.showLeft();
 				break;
 			case ""://to stop it from crashing for extra spaces
 				break;
