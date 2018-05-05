@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import robosub.debug;
 import robosub.movable;
 import robosub.update;
+import SonarUtil.SPI_int;
 
 public class SonarExec implements Runnable {
 	private boolean RUN = false;

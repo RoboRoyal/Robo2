@@ -18,7 +18,7 @@ public class SPI_int implements Runnable {
 	Thread t;
 	ArrayList<Integer> data = new ArrayList<Integer>();
 	SpiChannel chan = SpiChannel.CS0;
-	final GpioController gpio;
+	//final GpioController gpio;
 	
 	public SPI_int(int SPI_con) {
 		if(SPI_con == 1)
@@ -26,7 +26,8 @@ public class SPI_int implements Runnable {
 	}
 
 	public void getVals() throws Exception{
-		if(gpio == null) gpio = GpioFactory.getInstance();
+		//if(gpio == null) gpio = GpioFactory.getInstance();
+		final GpioController gpio = GpioFactory.getInstance();
         // Create custom MCP3008 analog gpio provider
         // we must specify which chip select (CS) that that ADC chip is physically connected to.
         final AdcGpioProvider provider = new MCP3008GpioProvider(SpiChannel.CS0,32000000,SpiDevice.DEFAULT_SPI_MODE,false);
@@ -58,8 +59,8 @@ public class SPI_int implements Runnable {
 	}
 
 	public void shut() {
-		if(gpio != null)
-			gpio.shutdown();
+		/*if(gpio != null)
+			gpio.shutdown();*/
 	}
 	
 }
