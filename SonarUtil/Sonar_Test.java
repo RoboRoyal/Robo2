@@ -11,7 +11,7 @@ public class Sonar_Test {
 		Search.left=better("test_data/left_data_full_ID1.txt");
 		Search.right=better("test_data/right_data_full_ID1.txt");
 		//Search.left=readIn("test_data/left_data_full_ID1.txt",200000);
-		//Search.right=readIn("test_data/right_data_full_ID1.txt",200000);
+		//Search.right=readIn("test_data/right_data_full_ID1.txt",200000); 
 		System.out.println("Got data; "+Search.left.length+", "+Search.right.length);
 		System.out.println("time = "+(System.currentTimeMillis()-st));
 		//return true;/*

@@ -4,10 +4,15 @@ import java.util.Arrays;
 
 public class Search {
 	public static int[] left, right, top;
+	//public static Complex[] leftC, rightC;
 	static int boxes;
 	static int size;
 	static int detection;
 	public static final int thresh = 512;//20480*16;
+	
+	public static void setLeft(int[] real){
+
+	}
 	
 	public static int tmp(double[] data, int freq){
 		for(int index = 0; index < data.length-size; index++){
@@ -125,7 +130,11 @@ public class Search {
 		return FFT.transformRadix2(doubles, cmplx);
 	}
 	
-	
+	public static void showLeft(){
+		for(int i = 0; i<100;i++){
+			System.out.println(left[(left.length*i/100)]);
+		}
+	}
 	
 	/*From one hydrophone
 	 * Run through the data, 

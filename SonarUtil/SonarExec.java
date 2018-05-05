@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 
+import robosub.debug;
 import robosub.movable;
 import robosub.update;
 
@@ -52,8 +53,9 @@ public class SonarExec implements Runnable {
 		try {
 			left.t.join();
 			right.t.join();
-			SPI_int.shut();
-			Thread.sleep(100);
+			left.shut();
+			right.shut();
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -66,7 +68,7 @@ public class SonarExec implements Runnable {
 			min = right.data.size();
 		min = min - 1;
 		if(min < 0){
-			System.out.println("Error in sonarExec lighterer() 44: min is -1");
+			System.out.println("Error in sonarExec lighterer() : min is -1");
 			return 0;
 		}		
 		System.out.println("Min: " + min);
@@ -97,6 +99,7 @@ public class SonarExec implements Runnable {
 		}else{
 			System.out.println("Too few samples to work: " + min);
 		}
+		debug.print("\n-----Sonar Info-----\nMin: "+min+"\nBucket: "+bucket+"\nDir: "+dir);
 		return dir;
 	}
 
