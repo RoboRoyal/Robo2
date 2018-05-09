@@ -1,0 +1,26 @@
+
+Left hydrophone is SPI 0
+Right hydrophon is SPI 1
+Center(down) hydrophone is not implimented
+
+Arduino in USB port of PI 3 model B (any port)
+
+Pinout for arduino(ARDUINO/GENUINO UNO REV3):
+ * For IMU; Vcc=3.3, GND = ground, SDA = pin4, SCL = pin 5 (Analog)
+ * For WaterSensor; Vcc=5, GND=ground, S=A0; >20uF cap and 20k ohm resistor between S and ground
+ * For Motors; All are digital 'D'. Each pin should be a PWM with a "~" next to it
+ * -Front Left = pin 3
+ * -Front Right = pin 5
+ * -Back Left = pin 6
+ * -Back Right = pin 9
+ * -Side Left = pin 10
+ * -Side Right = pin 11
+ * For depth sensor(not implimented)
+
+ All should share same ground(nutral) and reference voltage (5V) with a >20uF cap over it
+ 
+ Pinout for Pi:
+ 
+ 
+  
+ 
