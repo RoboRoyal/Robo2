@@ -17,7 +17,6 @@ public class SonarExec implements Runnable {
 	private boolean RUN = false;
 	private Thread t;
 	private static final boolean saveFiles = false;
-	// private pingerReader left, right;
 	static String left = "left.txt";
 	static String right = "right.txt";
 	
@@ -33,10 +32,11 @@ public class SonarExec implements Runnable {
 	}
 	
 	public static int[] convert(ArrayList<Integer> dataIn, int size){
-		final int con = 16;
+		final short con = 16;
+		final short offset = 512 * 16;
 		int[] out = new int[size];
 		for(int i = 0; i< size; i++)
-		    out[i] = con * dataIn.get(i);
+		    out[i] = con * dataIn.get(i) - offset;
 		return out;
 	}
 	
@@ -73,10 +73,13 @@ public class SonarExec implements Runnable {
 			return 0;
 		}		
 		System.out.println("Min: " + min);
+		System.out.println("Difference: "+(left.data.size()-right.data.size()));
+		if((left.data.size()-right.data.size())>225)
+			debug.print("Poor size diff: "+(left.data.size()-right.data.size()));
 		
 		if(min > 20 * 1000 ){
 			Search.left = convert(left.data, min);
-			//Search.right = convert(right.data, min);
+			Search.right = convert(right.data, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
 			if(saveFiles){
 				long tm = System.currentTimeMillis();
@@ -206,6 +209,9 @@ public class SonarExec implements Runnable {
 		// END LOOP:-----------
 
 		// close everything with end()
+	}
+	public static void shutdown(){
+
 	}
 
 	public void setup() {

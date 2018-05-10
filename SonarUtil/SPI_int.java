@@ -18,6 +18,7 @@ public class SPI_int implements Runnable {
 	Thread t;
 	ArrayList<Integer> data = new ArrayList<Integer>();
 	SpiChannel chan = SpiChannel.CS0;
+	public static boolean RUN = false;
 	//final GpioController gpio;
 	
 	public SPI_int(int SPI_con) {
@@ -44,7 +45,9 @@ public class SPI_int implements Runnable {
 	@Override
 	public void run() {
 		try {
+			RUN = true;
 			getVals();
+			RUN = false;
 		}catch(Exception e){System.out.println("Error SPI: "+e);
 		e.getStackTrace();
 		}
@@ -64,3 +67,5 @@ public class SPI_int implements Runnable {
 	}
 	
 }
+//pi4j, m3008
+//https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008
