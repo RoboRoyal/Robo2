@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.pi4j.system.SystemInfo;
 
+import SonarUtil.SPI_int;
 import SonarUtil.Search;
 import SonarUtil.SonarExec;
 import SonarUtil.Sonar_Test;
@@ -166,6 +167,10 @@ public class parser implements Runnable {
 			case "END":
 				//End of config file
 				debug.log("Successful cfg parsing\n*----------------------*\n");
+				break;
+			case "update_time":
+				x++;
+				update.setDelayTime(Integer.valueOf(arg[x]).shortValue());
 				break;
 			case "face":
 				x++;
@@ -466,9 +471,10 @@ public class parser implements Runnable {
 				break;
 			case "whatson":
 				if(core.RUN){System.out.println("Core");}
-				if(update.RUN){System.out.println("Update");}
-				if(movable.RUN){System.out.println("Movable");}
+				if(update.RUN){System.out.println("Update: Puased? "+update.puase);}
+				if(movable.RUN){System.out.println("Movable: Puased? "+movable.puase);}
 				if(parser.RUN){System.out.println("Parser");}
+				if(SPI_int.RUN){System.out.println("SPI_int");}
 				break;
 			case "help":
 			case "?":
