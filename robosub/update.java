@@ -362,7 +362,7 @@ public class update implements Runnable {// interface with sensors
 		update.delayTime = delayTime;
 	}
 
-	private static void set(String newOutputString) {
+	public static void set(String newOutputString) {
 		if (basic.logger_lvl > 10)
 			debug.log("Setting update.output @ : " + System.currentTimeMillis() + " : " + newOutputString);
 		output = newOutputString;
