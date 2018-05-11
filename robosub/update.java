@@ -259,7 +259,7 @@ public class update implements Runnable {// interface with sensors
 		newString += test_num;
 		newString += ",";// sets the rest of the values
 		try {
-			Thread.sleep((long) (delayTime * .8));
+			Thread.sleep((long) (delayTime));
 		} catch (InterruptedException e1) {
 			System.out.println("Interupt in delay of update.selftest(): " + e1);
 		}
@@ -280,6 +280,7 @@ public class update implements Runnable {// interface with sensors
 																	// test
 			System.out.println("Bad input from ard on st: " + input);
 			debug.log("Bad input from ard on self test: " + input);
+			set("[v");
 			return false;// no coms = bad
 		} else {
 			// Good test
