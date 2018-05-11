@@ -492,6 +492,8 @@ public class parser implements Runnable {
 				if(movable.RUN){System.out.println("Movable: Puased? "+movable.puase);}
 				if(parser.RUN){System.out.println("Parser");}
 				if(SPI_int.RUN){System.out.println("SPI_int");}
+				if(SonarExec.RUN){System.out.println("SonarExec");}
+				if(SonarExec.running){System.out.println("SonarExec sub func");}
 				break;
 			case "help":
 			case "?":
