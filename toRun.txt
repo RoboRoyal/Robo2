@@ -22,3 +22,8 @@ start #start program
 #legacy, dont worry
 pi4j --compile SonarUtil/*.java
 python3 SonarUtil/core.py
+
+
+10 200 51 204
+pi
+2
