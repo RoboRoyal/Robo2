@@ -44,8 +44,8 @@ public class SonarExec implements Runnable {
 			int x = 0;
 			int last = 0;
 			for (int t : data){
+				x++;
 				if(t != last){
-					x++;
 					last = t;
 					temp.append("Sample: "+x+": ");
 				temp.append(t + "\n");}}
