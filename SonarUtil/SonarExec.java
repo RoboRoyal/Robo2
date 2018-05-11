@@ -21,7 +21,21 @@ public class SonarExec implements Runnable {
 	static String left = "left.txt";
 	static String right = "right.txt";
 	
+	@SuppressWarnings("unused")
+	public static int correction(int dir, int size){
+		
+		if(false)//change if direction needs to be reversed
+			dir = - dir;
+		
+		if(size < 80 * 1000 && dir != 0){
+			dir *= (1 + (80*1000 - size)/5);
+		}
+		
+		return dir;
+	}
+	
 	public static void save(String file,int[] data){
+		file = "sonarFiles/"+file;//adds dir
 		StringBuilder temp = new StringBuilder();
 		try (Writer logOut = new BufferedWriter(new FileWriter(new File(file),true))) {
 			for(int t : data)
@@ -48,22 +62,21 @@ public class SonarExec implements Runnable {
 		int bucket = 0;
 		SPI_int hydro = new SPI_int(0);
 		try {hydro.mono();} catch (Exception e1) {e1.printStackTrace();}
-		System.out.println("Got data; " + hydro.data.size() + ", " + hydro.data2.size());
+		System.out.println("Got data origonal size: " + hydro.data.size() + ", " + hydro.data2.size());
 		
-		int min = hydro.data.size();
-		if (min > hydro.data2.size())
-			min = hydro.data2.size();
-		min = min - 1;
+		int min = -1;
+		if(hydro.data.size() == hydro.data2.size())
+			min = hydro.data.size();
 		if(min < 0){
 			System.out.println("Error in sonarExec lighterer() : min is -1");
 			return 0;
 		}		
 		System.out.println("Min: " + min);
-		System.out.println("Difference: "+(hydro.data.size()-hydro.data2.size()));
+		//System.out.println("Difference: "+(hydro.data.size()-hydro.data2.size()));
 		if((hydro.data.size()-hydro.data2.size())>225)
 			debug.print("Poor size diff: "+(hydro.data.size()-hydro.data2.size()));
 		
-		if(min > 20 * 1000 ){
+		if(min > 20 * 1000 ){//need at least 20k samples to even do anything
 			Search.left = convert(hydro.data, min);
 			Search.right = convert(hydro.data2, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
@@ -91,7 +104,7 @@ public class SonarExec implements Runnable {
 		}
 		debug.print("\n-----Sonar Info-----\nMin: "+min+"\nBucket: "+bucket+"\nDir: "+dir);
 		running = false;
-		return dir;
+		return correction(dir, min);
 	}
 	
 	public static int lighterer(){
@@ -99,18 +112,18 @@ public class SonarExec implements Runnable {
 		System.out.println("------------Next gen-----------");
 		int dir = 0;
 		int bucket = 0;
-		SPI_int left = new SPI_int(0);
-		SPI_int right = new SPI_int(1);
+		SPI_int leftHydrophone = new SPI_int(0);
+		SPI_int rightHydrophone = new SPI_int(1);
 		//SPI_int right = new SPI_int(0);
 		movable.puase(true);
 		update.puase(true);
-		left.start();
-		right.start();
+		leftHydrophone.start();
+		rightHydrophone.start();
 		try {
-			left.t.join();
-			right.t.join();
-			left.shut();
-			right.shut();
+			leftHydrophone.t.join();
+			rightHydrophone.t.join();
+			leftHydrophone.shut();
+			rightHydrophone.shut();
 			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -118,23 +131,23 @@ public class SonarExec implements Runnable {
 		
 		movable.puase(false);
 		update.puase(false);
-		System.out.println("Got data; " + left.data.size() + ", " + right.data.size());
-		int min = left.data.size();
-		if (min > right.data.size())
-			min = right.data.size();
+		System.out.println("Got data origonal size: " + leftHydrophone.data.size() + ", " + rightHydrophone.data.size());
+		int min = leftHydrophone.data.size();
+		if (min > rightHydrophone.data.size())
+			min = rightHydrophone.data.size();
 		min = min - 1;
 		if(min < 0){
 			System.out.println("Error in sonarExec lighterer() : min is -1");
 			return 0;
 		}		
 		System.out.println("Min: " + min);
-		System.out.println("Difference: "+(left.data.size()-right.data.size()));
-		if((left.data.size()-right.data.size())>225)
-			debug.print("Poor size diff: "+(left.data.size()-right.data.size()));
+		System.out.println("Difference: "+(leftHydrophone.data.size()-rightHydrophone.data.size()));
+		if((leftHydrophone.data.size()-rightHydrophone.data.size())>225)
+			debug.print("Poor size diff: "+(leftHydrophone.data.size()-rightHydrophone.data.size()));
 		
 		if(min > 20 * 1000 ){
-			Search.left = convert(left.data, min);
-			Search.right = convert(right.data, min);
+			Search.left = convert(leftHydrophone.data, min);
+			Search.right = convert(rightHydrophone.data, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
 			if(saveFiles){
 				long tm = System.currentTimeMillis();
