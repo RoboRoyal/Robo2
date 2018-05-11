@@ -429,7 +429,7 @@ public class parser implements Runnable {
 			case "save_sonar":
 				SonarExec.saveFiles = isTrue(arg[++x]);
 				break;
-			case "mono_soanr":
+			case "mono_sonar":
 				core.MONO = isTrue(arg[++x]);
 				break;
 			case "set_debug_lvl":
