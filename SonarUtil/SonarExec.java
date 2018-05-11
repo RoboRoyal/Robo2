@@ -41,8 +41,15 @@ public class SonarExec implements Runnable {
 		file = "sonarFiles/" + file;// adds dir
 		StringBuilder temp = new StringBuilder();
 		try (Writer logOut = new BufferedWriter(new FileWriter(new File(file), true))) {
-			for (int t : data)
-				temp.append(t + "\n");
+			int x = 0;
+			int last = 0;
+			for (int t : data){
+				if(t != last){
+					x++;
+					last = t;
+					temp.append("Sample: "+x+": ");
+				temp.append(t + "\n");}}
+			temp.append("Total samples: "+x);
 			logOut.write(temp.toString());
 		} catch (IOException e) {
 			System.out.print("Problem writing to file from SonarExec.save(): " + e);
