@@ -176,6 +176,9 @@ public class parser implements Runnable {
 				x++;
 				movable.face(Integer.valueOf(arg[x]));
 				break;
+			case "surface":
+				movable.surface();
+				break;
 			case "set_direction"://Better to use face() or MoveInDir()
 			case "set_dir":
 				x++;
@@ -423,9 +426,20 @@ public class parser implements Runnable {
 			case "test_motors":
 				movable.motorTest();
 				break;
+			case "save_sonar":
+				SonarExec.saveFiles = isTrue(arg[++x]);
+				break;
 			case "set_debug_lvl":
 				x++;
 				basic.debug_lvl = valueOf(arg[x]);
+				break;
+			case "puase_update":
+				x++;
+				update.puase(isTrue(arg[x]));
+				break;
+			case "puase_movable":
+				x++;
+				movable.puase(isTrue(arg[x]));
 				break;
 			case "mot":
 				int[] motor_vals = { 1500, 1500, 1500, 1500, 1500, 1500 };
