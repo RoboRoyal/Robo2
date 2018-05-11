@@ -19,6 +19,7 @@ public class SonarExec implements Runnable {
 	public static boolean saveFiles = false;
 	static String left = "left.txt";
 	static String right = "right.txt";
+	public static boolean doPause = false;
 
 	@SuppressWarnings("unused")
 	public static int correction(int dir, int size) {
@@ -65,7 +66,11 @@ public class SonarExec implements Runnable {
 		int bucket = 0;
 		SPI_int hydro = new SPI_int(0);
 		try {
+			movable.puase(doPause);
+			update.puase(doPause);
 			hydro.mono();
+			movable.puase(false);
+			update.puase(false);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -123,8 +128,8 @@ public class SonarExec implements Runnable {
 		SPI_int leftHydrophone = new SPI_int(0);
 		SPI_int rightHydrophone = new SPI_int(1);
 		// SPI_int right = new SPI_int(0);
-		movable.puase(true);
-		update.puase(true);
+		movable.puase(doPause);
+		update.puase(doPause);
 		leftHydrophone.start();
 		rightHydrophone.start();
 		try {
@@ -139,8 +144,7 @@ public class SonarExec implements Runnable {
 
 		movable.puase(false);
 		update.puase(false);
-		System.out
-				.println("Got data origonal size: " + leftHydrophone.data.size() + ", " + rightHydrophone.data.size());
+		System.out.println("Got data origonal size: " + leftHydrophone.data.size() + ", " + rightHydrophone.data.size());
 		int min = leftHydrophone.data.size();
 		if (min > rightHydrophone.data.size())
 			min = rightHydrophone.data.size();
