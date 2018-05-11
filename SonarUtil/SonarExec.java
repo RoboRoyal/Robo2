@@ -16,7 +16,7 @@ import SonarUtil.SPI_int;
 public class SonarExec implements Runnable {
 	private boolean RUN = false;
 	private Thread t;
-	private static final boolean saveFiles = false;
+	public static boolean saveFiles = false;
 	static String left = "left.txt";
 	static String right = "right.txt";
 	
@@ -38,6 +38,56 @@ public class SonarExec implements Runnable {
 		for(int i = 0; i< size; i++)
 		    out[i] = con * dataIn.get(i) - offset;
 		return out;
+	}
+	
+	public static int mono(){
+		System.out.println("------------Next gen-----------");
+		int dir = 0;
+		int bucket = 0;
+		SPI_int hydro = new SPI_int(0);
+		
+		
+		int min = hydro.data.size();
+		if (min > hydro.data2.size())
+			min = hydro.data2.size();
+		min = min - 1;
+		if(min < 0){
+			System.out.println("Error in sonarExec lighterer() : min is -1");
+			return 0;
+		}		
+		System.out.println("Min: " + min);
+		System.out.println("Difference: "+(hydro.data.size()-hydro.data2.size()));
+		if((hydro.data.size()-hydro.data2.size())>225)
+			debug.print("Poor size diff: "+(hydro.data.size()-hydro.data2.size()));
+		
+		if(min > 20 * 1000 ){
+			Search.left = convert(hydro.data, min);
+			Search.right = convert(hydro.data2, min);
+			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
+			if(saveFiles){
+				long tm = System.currentTimeMillis();
+				save("left_"+tm+".txt",Search.left);
+				save("right_"+tm+".txt",Search.right);
+			}
+			try {
+				bucket = Search.findBucket();
+				System.out.println("Bucket is: " + bucket);
+			} catch (Exception e) {
+				System.out.println("Fail1: " + e);
+				e.printStackTrace();
+			}
+			try {
+				dir = Search.findDir(bucket);
+				//System.out.println("Dir is: " + dir);
+			} catch (Exception e) {
+				System.out.println("Fail2: " + e);
+				e.printStackTrace();
+			}
+		}else{
+			System.out.println("Too few samples to work: " + min);
+		}
+		debug.print("\n-----Sonar Info-----\nMin: "+min+"\nBucket: "+bucket+"\nDir: "+dir);
+		return dir;
 	}
 	
 	public static int lighterer(){

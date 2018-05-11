@@ -17,6 +17,7 @@ import robosub.debug;
 public class SPI_int implements Runnable {
 	Thread t;
 	ArrayList<Integer> data = new ArrayList<Integer>();
+	ArrayList<Integer> data2 = new ArrayList<Integer>();
 	SpiChannel chan = SpiChannel.CS0;
 	public static boolean RUN = false;
 	//final GpioController gpio;
@@ -40,6 +41,24 @@ public class SPI_int implements Runnable {
         while(System.currentTimeMillis()-start < 2000) {
             data.add((int)input.getValue());
         }
+	}
+	
+	public void mono() throws Exception{
+		final GpioController gpio = GpioFactory.getInstance();
+        // Create custom MCP3008 analog gpio provider
+        // we must specify which chip select (CS) that that ADC chip is physically connected to.
+        final AdcGpioProvider provider = new MCP3008GpioProvider(SpiChannel.CS0,32000000,SpiDevice.DEFAULT_SPI_MODE,false);
+        // Provision gpio analog input pins for all channels of the MCP3008.
+        // (you don't have to define them all if you only use a subset in your project)
+        final GpioPinAnalogInput input_Left= gpio.provisionAnalogInputPin(provider, MCP3008Pin.CH0, "MyAnalogInput-CH0");
+        final GpioPinAnalogInput input_Right= gpio.provisionAnalogInputPin(provider, MCP3008Pin.CH1, "MyAnalogInput-CH0");
+        //ArrayList<Integer> data = new ArrayList<Integer>();
+        long start = System.currentTimeMillis();
+        while(System.currentTimeMillis()-start < 2000) {
+            data.add((int)input_Left.getValue());
+            data2.add((int)input_Right.getValue());
+        }
+		
 	}
 
 	@Override
