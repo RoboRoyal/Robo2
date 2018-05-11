@@ -269,7 +269,7 @@ public class update implements Runnable {// interface with sensors
 		init = 1;
 		try {
 			while (init != 2) {// waits for init for be 2
-				Thread.sleep(5);
+				Thread.sleep(1);
 			}
 		} catch (Exception e) {
 			System.out.println("This is kinda bad; thread interupt in update.selfTest: " + e.getMessage());

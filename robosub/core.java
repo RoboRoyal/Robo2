@@ -30,6 +30,7 @@ public class core implements Runnable {
 	private static long MAX_TIME = 20000;// mili
 	private static short error = 0;
 	private static boolean error_allow = true;
+	public static boolean MONO = true;
 
 	static void wait_start(Integer integer) {
 		System.out.println();
@@ -175,7 +176,8 @@ public class core implements Runnable {
 		int nextDir = 0;
 		if(PI){//If we are running on real PI
 			//get next dir from SonarExec
-			try{nextDir = SonarExec.lighterer();}catch(Exception e){debug.print("err in case12: "+e);}
+			if(MONO) try{nextDir = SonarExec.lighterer();}catch(Exception e){debug.print("err in case12: "+e);}
+			else try{nextDir = SonarExec.mono();}catch(Exception e){debug.print("err in case13: "+e);}
 			debug.print("Next dir is: "+nextDir);
 			movable.moveInDir_R(nextDir);
 		}else{
