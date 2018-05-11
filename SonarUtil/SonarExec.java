@@ -1,6 +1,5 @@
 package SonarUtil;
 
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -20,70 +19,79 @@ public class SonarExec implements Runnable {
 	public static boolean saveFiles = false;
 	static String left = "left.txt";
 	static String right = "right.txt";
-	
+
 	@SuppressWarnings("unused")
-	public static int correction(int dir, int size){
-		
-		if(false)//change if direction needs to be reversed
-			dir = - dir;
-		
-		if(size < 80 * 1000 && dir != 0){
-			dir *= (1 + (80*1000 - size)/5);
+	public static int correction(int dir, int size) {
+
+		if (false)// change if direction needs to be reversed
+			dir = -dir;
+
+		if (size < 80 * 1000 && dir != 0) {
+			while (size < 80 * 1000) {
+				dir *= 1.05;
+				size += 10000;
+			}
 		}
-		
+
 		return dir;
 	}
-	
-	public static void save(String file,int[] data){
-		file = "sonarFiles/"+file;//adds dir
+
+	public static void save(String file, int[] data) {
+		file = "sonarFiles/" + file;// adds dir
 		StringBuilder temp = new StringBuilder();
-		try (Writer logOut = new BufferedWriter(new FileWriter(new File(file),true))) {
-			for(int t : data)
-				temp.append(t+"\n");
+		try (Writer logOut = new BufferedWriter(new FileWriter(new File(file), true))) {
+			for (int t : data)
+				temp.append(t + "\n");
 			logOut.write(temp.toString());
 		} catch (IOException e) {
 			System.out.print("Problem writing to file from SonarExec.save(): " + e);
-		}finally{/*Finally*/}
+		} finally {
+			/* Finally */}
 	}
-	
-	public static int[] convert(ArrayList<Integer> dataIn, int size){
+
+	public static int[] convert(ArrayList<Integer> dataIn, int size) {
 		final short con = 16;
 		final short offset = 512 * 16;
 		int[] out = new int[size];
-		for(int i = 0; i< size; i++)
-		    out[i] = con * dataIn.get(i) - offset;
+		for (int i = 0; i < size; i++)
+			out[i] = con * dataIn.get(i) - offset;
 		return out;
 	}
-	
-	public static int mono(){
+
+	public static int mono() {
 		running = true;
 		System.out.println("------------Next gen-----------");
 		int dir = 0;
 		int bucket = 0;
 		SPI_int hydro = new SPI_int(0);
-		try {hydro.mono();} catch (Exception e1) {e1.printStackTrace();}
+		try {
+			hydro.mono();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		System.out.println("Got data origonal size: " + hydro.data.size() + ", " + hydro.data2.size());
-		
+
 		int min = -1;
-		if(hydro.data.size() == hydro.data2.size())
+		if (hydro.data.size() == hydro.data2.size())
 			min = hydro.data.size();
-		if(min < 0){
+		if (min < 0) {
 			System.out.println("Error in sonarExec lighterer() : min is -1");
 			return 0;
-		}		
+		}
 		System.out.println("Min: " + min);
-		//System.out.println("Difference: "+(hydro.data.size()-hydro.data2.size()));
-		if((hydro.data.size()-hydro.data2.size())>225)
-			debug.print("Poor size diff: "+(hydro.data.size()-hydro.data2.size()));
-		
-		if(min > 20 * 1000 ){//need at least 20k samples to even do anything
+		// System.out.println("Difference:
+		// "+(hydro.data.size()-hydro.data2.size()));
+		if ((hydro.data.size() - hydro.data2.size()) > 225)
+			debug.print("Poor size diff: " + (hydro.data.size() - hydro.data2.size()));
+
+		if (min > 20 * 1000) {// need at least 20k samples to even do anything
 			Search.left = convert(hydro.data, min);
 			Search.right = convert(hydro.data2, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
-			if(saveFiles){
+			if (saveFiles) {
 				long tm = System.currentTimeMillis();
-				save("left_"+tm+".txt",Search.left);
-				save("right_"+tm+".txt",Search.right);
+				save("left_" + tm + ".txt", Search.left);
+				save("right_" + tm + ".txt", Search.right);
 			}
 			try {
 				bucket = Search.findBucket();
@@ -94,27 +102,27 @@ public class SonarExec implements Runnable {
 			}
 			try {
 				dir = Search.findDir(bucket);
-				//System.out.println("Dir is: " + dir);
+				// System.out.println("Dir is: " + dir);
 			} catch (Exception e) {
 				System.out.println("Fail2: " + e);
 				e.printStackTrace();
 			}
-		}else{
+		} else {
 			System.out.println("Too few samples to work: " + min);
 		}
-		debug.print("\n-----Sonar Info-----\nMin: "+min+"\nBucket: "+bucket+"\nDir: "+dir);
+		debug.print("\n-----Sonar Info-----\nMin: " + min + "\nBucket: " + bucket + "\nDir: " + dir);
 		running = false;
 		return correction(dir, min);
 	}
-	
-	public static int lighterer(){
+
+	public static int lighterer() {
 		running = true;
 		System.out.println("------------Next gen-----------");
 		int dir = 0;
 		int bucket = 0;
 		SPI_int leftHydrophone = new SPI_int(0);
 		SPI_int rightHydrophone = new SPI_int(1);
-		//SPI_int right = new SPI_int(0);
+		// SPI_int right = new SPI_int(0);
 		movable.puase(true);
 		update.puase(true);
 		leftHydrophone.start();
@@ -128,31 +136,32 @@ public class SonarExec implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		movable.puase(false);
 		update.puase(false);
-		System.out.println("Got data origonal size: " + leftHydrophone.data.size() + ", " + rightHydrophone.data.size());
+		System.out
+				.println("Got data origonal size: " + leftHydrophone.data.size() + ", " + rightHydrophone.data.size());
 		int min = leftHydrophone.data.size();
 		if (min > rightHydrophone.data.size())
 			min = rightHydrophone.data.size();
 		min = min - 1;
-		if(min < 0){
+		if (min < 0) {
 			System.out.println("Error in sonarExec lighterer() : min is -1");
 			return 0;
-		}		
+		}
 		System.out.println("Min: " + min);
-		System.out.println("Difference: "+(leftHydrophone.data.size()-rightHydrophone.data.size()));
-		if((leftHydrophone.data.size()-rightHydrophone.data.size())>225)
-			debug.print("Poor size diff: "+(leftHydrophone.data.size()-rightHydrophone.data.size()));
-		
-		if(min > 20 * 1000 ){
+		System.out.println("Difference: " + (leftHydrophone.data.size() - rightHydrophone.data.size()));
+		if ((leftHydrophone.data.size() - rightHydrophone.data.size()) > 225)
+			debug.print("Poor size diff: " + (leftHydrophone.data.size() - rightHydrophone.data.size()));
+
+		if (min > 20 * 1000) {
 			Search.left = convert(leftHydrophone.data, min);
 			Search.right = convert(rightHydrophone.data, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
-			if(saveFiles){
+			if (saveFiles) {
 				long tm = System.currentTimeMillis();
-				save("left_"+tm+".txt",Search.left);
-				save("right_"+tm+".txt",Search.right);
+				save("left_" + tm + ".txt", Search.left);
+				save("right_" + tm + ".txt", Search.right);
 			}
 			try {
 				bucket = Search.findBucket();
@@ -163,15 +172,15 @@ public class SonarExec implements Runnable {
 			}
 			try {
 				dir = Search.findDir(bucket);
-				//System.out.println("Dir is: " + dir);
+				// System.out.println("Dir is: " + dir);
 			} catch (Exception e) {
 				System.out.println("Fail2: " + e);
 				e.printStackTrace();
 			}
-		}else{
+		} else {
 			System.out.println("Too few samples to work: " + min);
 		}
-		debug.print("\n-----Sonar Info-----\nMin: "+min+"\nBucket: "+bucket+"\nDir: "+dir);
+		debug.print("\n-----Sonar Info-----\nMin: " + min + "\nBucket: " + bucket + "\nDir: " + dir);
 		running = false;
 		return dir;
 	}
@@ -197,7 +206,7 @@ public class SonarExec implements Runnable {
 			min = Sonar_Test.getSize(right);
 		min = min - 1;
 		System.out.println("Min: " + min);
-		if(min < 13000 ){
+		if (min < 13000) {
 			Search.left = Sonar_Test.readInSmall(left, min);
 			Search.right = Sonar_Test.readInSmall(right, min);
 			System.out.println("Got data; " + Search.left.length + ", " + Search.right.length);
@@ -210,12 +219,12 @@ public class SonarExec implements Runnable {
 			}
 			try {
 				dir = Search.findDir(bucket);
-				//System.out.println("Dir is: " + dir);
+				// System.out.println("Dir is: " + dir);
 			} catch (Exception e) {
 				System.out.println("Fail2: " + e);
 				e.printStackTrace();
 			}
-		}else{
+		} else {
 			System.out.print("Too few samples to work");
 		}
 		return dir;
@@ -279,7 +288,8 @@ public class SonarExec implements Runnable {
 
 		// close everything with end()
 	}
-	public static void shutdown(){
+
+	public static void shutdown() {
 
 	}
 
