@@ -47,7 +47,8 @@ public class SonarExec implements Runnable {
 		int dir = 0;
 		int bucket = 0;
 		SPI_int hydro = new SPI_int(0);
-		
+		try {hydro.mono();} catch (Exception e1) {e1.printStackTrace();}
+		System.out.println("Got data; " + hydro.data.size() + ", " + hydro.data2.size());
 		
 		int min = hydro.data.size();
 		if (min > hydro.data2.size())
@@ -117,7 +118,7 @@ public class SonarExec implements Runnable {
 		
 		movable.puase(false);
 		update.puase(false);
-		
+		System.out.println("Got data; " + left.data.size() + ", " + right.data.size());
 		int min = left.data.size();
 		if (min > right.data.size())
 			min = right.data.size();
