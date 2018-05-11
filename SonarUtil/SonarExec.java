@@ -49,7 +49,7 @@ public class SonarExec implements Runnable {
 					last = t;
 					temp.append("Sample: "+x+": ");
 				temp.append(t + "\n");}}
-			temp.append("Total samples: "+x);
+			temp.append("Total samples: "+x+"\n");
 			logOut.write(temp.toString());
 		} catch (IOException e) {
 			System.out.print("Problem writing to file from SonarExec.save(): " + e);
@@ -62,7 +62,8 @@ public class SonarExec implements Runnable {
 		final short offset = 512 * 16;
 		int[] out = new int[size];
 		for (int i = 0; i < size; i++)
-			out[i] = con * dataIn.get(i) - offset;
+			//out[i] = con * dataIn.get(i) - offset;
+			out[i] = dataIn.get(i);
 		return out;
 	}
 
