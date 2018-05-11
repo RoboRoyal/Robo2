@@ -14,7 +14,8 @@ import robosub.update;
 import SonarUtil.SPI_int;
 
 public class SonarExec implements Runnable {
-	private boolean RUN = false;
+	public static boolean RUN = false;
+	public static boolean running = false;
 	private Thread t;
 	public static boolean saveFiles = false;
 	static String left = "left.txt";
@@ -41,6 +42,7 @@ public class SonarExec implements Runnable {
 	}
 	
 	public static int mono(){
+		running = true;
 		System.out.println("------------Next gen-----------");
 		int dir = 0;
 		int bucket = 0;
@@ -87,10 +89,12 @@ public class SonarExec implements Runnable {
 			System.out.println("Too few samples to work: " + min);
 		}
 		debug.print("\n-----Sonar Info-----\nMin: "+min+"\nBucket: "+bucket+"\nDir: "+dir);
+		running = false;
 		return dir;
 	}
 	
 	public static int lighterer(){
+		running = true;
 		System.out.println("------------Next gen-----------");
 		int dir = 0;
 		int bucket = 0;
@@ -154,6 +158,7 @@ public class SonarExec implements Runnable {
 			System.out.println("Too few samples to work: " + min);
 		}
 		debug.print("\n-----Sonar Info-----\nMin: "+min+"\nBucket: "+bucket+"\nDir: "+dir);
+		running = false;
 		return dir;
 	}
 
