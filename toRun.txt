@@ -1,9 +1,20 @@
+Go to dir NewRoboSub
+enter following commands:
+
 rm -rf *
 git clone https://github.com/RoboRoyal/Robo2
 cd Robo2
 pi4j --compile robosub/*.java
 pi4j --run robosub/basic
 
+
+#The program should now be running
+#To run sonar nav, enter follow commands:
+
+mode 12 #turn to sonar nav mode
+mono_sonar false #use mono SPI for best results. this should be defualt
+init #there will be a bunch of error messages, ignor them
+start #start program
 
 pi4j --compile SonarUtil/*.java
 python3 SonarUtil/core.py
