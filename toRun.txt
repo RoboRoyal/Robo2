@@ -16,6 +16,7 @@ mono_sonar true #use mono SPI for best results. this should be defualt
 init #there will be a bunch of error messages, ignor them
 start #start program
 
+#you can always use help or ? to get a list of more commands
 
 
 #legacy, dont worry
