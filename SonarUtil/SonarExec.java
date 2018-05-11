@@ -60,7 +60,7 @@ public class SonarExec implements Runnable {
 
 	public static int mono() {
 		running = true;
-		System.out.println("------------Next gen-----------");
+		System.out.println("------------Next gen(MONO)-----------");
 		int dir = 0;
 		int bucket = 0;
 		SPI_int hydro = new SPI_int(0);
