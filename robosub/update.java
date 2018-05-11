@@ -259,7 +259,7 @@ public class update implements Runnable {// interface with sensors
 		newString += test_num;
 		newString += ",";// sets the rest of the values
 		try {
-			Thread.sleep((long) (delayTime));
+			Thread.sleep((long) (delayTime * .99));
 		} catch (InterruptedException e1) {
 			System.out.println("Interupt in delay of update.selftest(): " + e1);
 		}
@@ -267,12 +267,17 @@ public class update implements Runnable {// interface with sensors
 		ready = true;
 		String good_string = "Running self test: " + test_num;
 		init = 1;
-		try {
+		/*try {
 			while (init != 2) {// waits for init for be 2
 				Thread.sleep(1);
 			}
 		} catch (Exception e) {
 			System.out.println("This is kinda bad; thread interupt in update.selfTest: " + e.getMessage());
+		}*/
+		try {
+			Thread.sleep((long) (delayTime * .99));
+		} catch (InterruptedException e1) {
+			System.out.println("Interupt in delay 2 of update.selftest(): " + e1);
 		}
 		if (!input.trim().equalsIgnoreCase(good_string.trim())) {// checks
 																	// validity

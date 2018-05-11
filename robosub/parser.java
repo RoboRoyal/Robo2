@@ -161,6 +161,9 @@ public class parser implements Runnable {
 			case "showleft":
 				Search.showLeft();
 				break;
+			case "dopause":
+				SonarExec.doPause = isTrue(arg[x+=1]);
+				break;
 			case "":// to stop it from crashing for extra spaces
 				break;
 			case "max_time":

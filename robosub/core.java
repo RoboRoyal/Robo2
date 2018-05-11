@@ -413,7 +413,7 @@ public class core implements Runnable {
 			// set up IO
 			//sonar me = new sonar();
 			//me.start();
-
+			System.out.println("Starting moveable");
 			movable me3 = new movable();
 			me3.start();
 			while(!movable.initiated()){
