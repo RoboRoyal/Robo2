@@ -408,13 +408,12 @@ public class core implements Runnable {
 			} else {
 				System.out.println("Unable to establish connection");
 			}
-			Thread.sleep(100);
+			Thread.sleep(50);
 			
 			// set up IO
 			//sonar me = new sonar();
 			//me.start();
 
-			Thread.sleep(200);
 			movable me3 = new movable();
 			me3.start();
 			while(!movable.initiated()){
