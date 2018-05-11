@@ -1,4 +1,11 @@
+Software:
+Make sure Arduino is running latest version of robo2.ino
+For Pi, make sure it is running pi4j snapshot 1.2: http://pi4j.com/download.html
+As well as have at least Java jdk1.8.0_111 or Java version 1.8.0_151, latter versions are fine
+Has been tested on Raspian, but may work on other falvors of linux
 
+
+Hardware: Arduino, Pi 3, MPU-6050, MCP 3008
 Left hydrophone is SPI 0
 Right hydrophon is SPI 1
 Center(down) hydrophone is not implimented
@@ -21,6 +28,4 @@ Pinout for arduino(ARDUINO/GENUINO UNO REV3):
  
  Pinout for Pi:
  
- 
-  
  
