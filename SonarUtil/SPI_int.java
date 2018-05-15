@@ -22,6 +22,36 @@ public class SPI_int implements Runnable {
 	public static boolean RUN = false;
 	//final GpioController gpio;
 	
+	
+	public static void monitor() {
+		final int len = 10 * 1000;
+		final int diff = 0;
+		
+		final GpioController gpio = GpioFactory.getInstance();
+        final AdcGpioProvider provider = new MCP3008GpioProvider(SpiChannel.CS0,32000000,SpiDevice.DEFAULT_SPI_MODE,false);
+        final GpioPinAnalogInput input_Left= gpio.provisionAnalogInputPin(provider, MCP3008Pin.CH0, "MyAnalogInput-CH0");
+        final GpioPinAnalogInput input_Right= gpio.provisionAnalogInputPin(provider, MCP3008Pin.CH1, "MyAnalogInput-CH0");
+        //ArrayList<Integer> data = new ArrayList<Integer>();
+        final long start = System.currentTimeMillis();
+        int last = 0;
+        int l = 0, r = 0, num = 0;
+        while(System.currentTimeMillis()-start < len) {
+        	l = (int)input_Left.getValue();
+        	num++;
+        	if(last != l && diff == 0|| Math.abs(last - l) > diff){
+        		last = l;
+        		System.out.println(num+": "+l);
+        	}
+        }
+        System.out.println(num + "captured in "+(len/1000)+"Sec = "+((num/(len/1000)))+" samples/seconds");
+		
+	}
+	
+	
+	
+	
+	
+	
 	public SPI_int(int SPI_con) {
 		if(SPI_con == 1)
 			chan = SpiChannel.CS1;
@@ -37,7 +67,7 @@ public class SPI_int implements Runnable {
         // (you don't have to define them all if you only use a subset in your project)
         final GpioPinAnalogInput input= gpio.provisionAnalogInputPin(provider, MCP3008Pin.CH0, "MyAnalogInput-CH0");
         //ArrayList<Integer> data = new ArrayList<Integer>();
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         while(System.currentTimeMillis()-start < 2000) {
             data.add((int)input.getValue());
         }
@@ -53,7 +83,7 @@ public class SPI_int implements Runnable {
         final GpioPinAnalogInput input_Left= gpio.provisionAnalogInputPin(provider, MCP3008Pin.CH0, "MyAnalogInput-CH0");
         final GpioPinAnalogInput input_Right= gpio.provisionAnalogInputPin(provider, MCP3008Pin.CH1, "MyAnalogInput-CH0");
         //ArrayList<Integer> data = new ArrayList<Integer>();
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         while(System.currentTimeMillis()-start < 2000) {
             data.add((int)input_Left.getValue());
             data2.add((int)input_Right.getValue());
@@ -84,6 +114,8 @@ public class SPI_int implements Runnable {
 		/*if(gpio != null)
 			gpio.shutdown();*/
 	}
+
+	
 	
 }
 //pi4j, m3008
