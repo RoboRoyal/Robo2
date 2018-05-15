@@ -23,7 +23,7 @@ public class SPI_int implements Runnable {
 	//final GpioController gpio;
 	
 	
-	public static void monitor() {
+	public static void monitor() throws Exception{
 		final int len = 10 * 1000;
 		final int diff = 0;
 		
