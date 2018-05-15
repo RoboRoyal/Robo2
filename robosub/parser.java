@@ -300,6 +300,9 @@ public class parser implements Runnable {
 				debug.log("Started by: " + System.getProperty("user.name"));
 				debug.log("*----------------------------*\n");
 				break;
+			case "monitor":
+				SPI_int.monitor();
+				break;
 			case "logTraffic":
 				x++;
 				update.logTraffic = isTrue(arg[x]);
