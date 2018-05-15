@@ -301,7 +301,7 @@ public class parser implements Runnable {
 				debug.log("*----------------------------*\n");
 				break;
 			case "monitor":
-				SPI_int.monitor();
+				try{SPI_int.monitor();}catch(Exception e){e.printStackTrace();}
 				break;
 			case "logTraffic":
 				x++;
