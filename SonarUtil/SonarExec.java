@@ -101,6 +101,10 @@ public class SonarExec implements Runnable {
 			try {
 				bucket = Search.findBucket();
 				System.out.println("Bucket is: " + bucket);
+				if(bucket < 2 ){
+					debug.print("Invalid bucket: "+bucket);
+					return 0;
+				}
 			} catch (Exception e) {
 				System.out.println("Fail1: " + e);
 				e.printStackTrace();

@@ -8,12 +8,15 @@ public class Sonar_Test {
 	public static boolean testSonar(){
 		int bucket = 0;
 		long st = System.currentTimeMillis();
-		Search.left=better("test_data/left_data_full_ID1.txt");
-		Search.right=better("test_data/right_data_full_ID1.txt");
+		Search.left=better("test_data/left_dat.txt");
+		Search.right=better("test_data/right_dat.txt");
+		//Search.left=better("test_data/left_data_full_ID1.txt");
+		//Search.right=better("test_data/right_data_full_ID1.txt");
 		//Search.left=readIn("test_data/left_data_full_ID1.txt",200000);
 		//Search.right=readIn("test_data/right_data_full_ID1.txt",200000); 
 		System.out.println("Got data; "+Search.left.length+", "+Search.right.length);
 		System.out.println("time = "+(System.currentTimeMillis()-st));
+		System.out.println(Search.scan().toString());
 		//return true;/*
 		try{
 			bucket = Search.findBucket();
